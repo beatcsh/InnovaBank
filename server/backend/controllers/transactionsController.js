@@ -60,5 +60,16 @@ export default {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }
+    },
+    getOne: async (req, res) => {
+        try {
+
+            const transaccion = await transacciones.findById(req.body._id)
+            return res.status(200).json(transaccion)
+            
+        }  catch (err) {
+            console.log(err)
+            return res.status(500).json({ "msg": "error en el servidor" })
+        }
     }
 }
