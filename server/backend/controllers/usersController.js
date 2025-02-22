@@ -61,7 +61,7 @@ export default {
                     colonia: user.colonia = req.body.colonia ? req.body.colonia : user.colonia,
                     estado: user.estado = req.body.estado ? req.body.estado : user.estado,
                     localidad: user.localidad = req.body.localidad ? req.body.localidad : user.localidad
-            } : user.direccion // sobrevivi a darle logica a esta cosa
+            } : user.direccion
 
             await usuarios.findByIdAndUpdate(id, user)
             res.status(200).json({ "msg": "actualizado con exito" })
@@ -92,7 +92,7 @@ export default {
             
             const user = await usuarios.findOne({ email })
             if ( !user ) return res.status(400).json({ "msg": "credenciales invalidas" })
-            if ( !bcrypt.compare(contrasena, user.contrasena) ) return res.status(400).json({ "msg": "credenciales invalidas" })
+            if ( !bcrypt.compare(contrasena, user.contrasena) ) return res.status(400).json({ "msg": "contraseña incorrecta" })
             
             const load = { _id: user._id, email: user.email }
             const token = await jwt.sign(load, process.env.private_key)
