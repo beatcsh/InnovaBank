@@ -21,7 +21,7 @@ export default {
 
             await cuentas.create(newAccount)
 
-            res.status(200).json({ "msg": "cuenta añadida" })
+            return res.status(200).json({ "msg": "cuenta añadida" })
 
         } catch (err) {
             console.log(err)
@@ -38,7 +38,7 @@ export default {
 
         }  catch (err) {
             console.log(err)
-            res.status(500).json({ "msg": "error en el servidor" })
+            return res.status(500).json({ "msg": "error en el servidor" })
         }
     }
 }

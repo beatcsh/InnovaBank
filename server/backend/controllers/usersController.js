@@ -34,11 +34,11 @@ export default {
 
             await usuarios.create(newUser)
 
-            res.status(200).json({ "msg": "usuario agregado" })
+            return res.status(200).json({ "msg": "usuario agregado" })
             
         } catch (err) {
             console.log(err)
-            res.status(500).json({ "msg": "error en el servidor" })
+            return res.status(500).json({ "msg": "error en el servidor" })
         }
     },
     edit: async (req, res) => {
@@ -64,11 +64,11 @@ export default {
             } : user.direccion
 
             await usuarios.findByIdAndUpdate(id, user)
-            res.status(200).json({ "msg": "actualizado con exito" })
+            return res.status(200).json({ "msg": "actualizado con exito" })
 
         }  catch (err) {
             console.log(err)
-            res.status(500).json({ "msg": "error en el servidor" })
+            return res.status(500).json({ "msg": "error en el servidor" })
         }
     },
     delete: async (req, res) => {
@@ -81,7 +81,7 @@ export default {
 
         }  catch (err) {
             console.log(err)
-            res.status(500).json({ "msg": "error en el servidor" })
+            return res.status(500).json({ "msg": "error en el servidor" })
         }
     },
     login: async (req, res) => {
@@ -101,7 +101,7 @@ export default {
 
         }  catch (err) {
             console.log(err)
-            res.status(500).json({ "msg": "error en el servidor" })
+            return res.status(500).json({ "msg": "error en el servidor" })
         }
     }
 }
