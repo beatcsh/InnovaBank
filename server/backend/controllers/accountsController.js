@@ -40,5 +40,17 @@ export default {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }
+    },
+    getAccountInfo: async (req, res) => {
+        try {
+            const id = req.query._id;
+            const account = await cuentas.findOne({ _id_usuario: id });
+            if (!account) return res.status(404).json({ "msg": "Cuenta no encontrada" });
+
+            return res.status(200).json(account);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ "msg": "Error en el servidor" });
+        }
     }
 }
