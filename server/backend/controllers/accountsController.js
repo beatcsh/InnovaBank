@@ -1,5 +1,5 @@
 import { cuentas } from "../models/cuentas.js"
-import { usuarios } from "../models/usuarios.js"
+import { usuarios } from "../models/usuariosModel.js"
 
 export default {
     add: async (req, res) => {
@@ -43,14 +43,14 @@ export default {
     },
     getAccountInfo: async (req, res) => {
         try {
-            const id = req.query._id;
-            const account = await cuentas.findOne({ _id_usuario: id });
-            if (!account) return res.status(404).json({ "msg": "Cuenta no encontrada" });
+            const id = req.query._id
+            const account = await cuentas.findOne({ _id_usuario: id })
+            if (!account) return res.status(404).json({ "msg": "Cuenta no encontrada" })
 
-            return res.status(200).json(account);
+            return res.status(200).json(account)
         } catch (err) {
-            console.error(err);
-            return res.status(500).json({ "msg": "Error en el servidor" });
+            console.error(err)
+            return res.status(500).json({ "msg": "Error en el servidor" })
         }
     }
 }

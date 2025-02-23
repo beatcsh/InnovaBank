@@ -1,6 +1,6 @@
-import { transacciones } from "../models/transactions.js"
-import { accounts } from "../models/accounts.js"
-import { history } from "../models/history.js" // pendiente
+import { transacciones } from "../models/transactionsModel.js"
+import { accounts } from "../models/accountsModel.js"
+import { history } from "../models/historyModel.js" // pendiente
 
 export default {
     create: async (req, res) => {
@@ -65,6 +65,7 @@ export default {
         try {
 
             const transaccion = await transacciones.findById(req.body._id)
+            if ( !transaccion ) return res.status(400).json({ "msg": "no existe la transaccion" })
             return res.status(200).json(transaccion)
             
         }  catch (err) {
