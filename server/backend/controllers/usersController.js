@@ -1,5 +1,5 @@
-import { usuarios } from "../models/usuarios.js"
-import {cuentas} from "../models/accounts.js"
+import { usuarios } from "../models/usuariosModel.js"
+import {cuentas} from "../models/accountsModel.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"

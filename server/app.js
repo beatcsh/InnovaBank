@@ -2,12 +2,12 @@ import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import cors from "cors"
-import userRoutes from "./routes/userRoutes.js"; // Importar las rutas de usuarios
-import financeRoutes from "./routes/financeRoutes.js"; // Importar las rutas de finanzas (ingresos/gastos)
-import transactionRoutes from "./routes/transactionsRoutes.js";
-
+import userRoutes from "./backend/routes/userRoutes.js"; // Importar las rutas de usuarios
+import transactionRoutes from "./backend/routes/transactionsRoutes.js";
+import accountRoutes from "./backend/routes/accountsRoutes.js"
 
 dotenv.config()
+
 mongoose.connect(process.env.url)
     .then(() => console.log("conexion establecida"))
     .catch((err) => console.log("error de conexion", err))

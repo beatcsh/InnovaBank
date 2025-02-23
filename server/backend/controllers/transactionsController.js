@@ -1,6 +1,6 @@
-import { transacciones } from "../models/transactions.js"
-import { accounts } from "../models/accounts.js"
-import { history } from "../models/history.js" // pendiente
+import { transacciones } from "../models/transactionsModel.js"
+import { accounts } from "../models/accountsModel.js"
+import { history } from "../models/historyModel.js" // pendiente
 
 export default {
     create: async (req, res) => {

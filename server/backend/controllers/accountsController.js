@@ -1,5 +1,5 @@
 import { cuentas } from "../models/cuentas.js"
-import { usuarios } from "../models/usuarios.js"
+import { usuarios } from "../models/usuariosModel.js"
 
 export default {
     add: async (req, res) => {
