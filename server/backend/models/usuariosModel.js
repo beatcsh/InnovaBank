@@ -1,6 +1,6 @@
-import {Schema, model} from "mongoose"
+import { Schema, model } from "mongoose";
 
-const usuariosSchema = new mongoose.Schema({
+const usuariosSchema = new Schema({
     nombre: String,
     apePa: String,
     apeMa: String,
@@ -9,9 +9,9 @@ const usuariosSchema = new mongoose.Schema({
     email: String,
     contraseña: String,
         direccion: {
-            cp: {type: int,required:true},
+            cp: {type: Number,required:true},
             calle: {type: String, required:true},
-            numero: {type: int,required: true},
+            numero: {type: Number,required: true},
             colonia: {type: String, required: true},
             estado: {type: String, required: true},
             localidad: {type: String, required: true}

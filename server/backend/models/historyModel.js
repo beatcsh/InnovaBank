@@ -1,13 +1,13 @@
-import mongoose from "mongoose"
+import { Schema, model } from "mongoose"
 
-const historySchema = new mongoose.Schema({
+const historySchema = new Schema({
     id_cuenta: String,
-        ingresos:[{type: mongoose.Schema.Types.ObjectId}],
-        egresos:[{type: mongoose.Schema.Types.ObjectId}]
+        ingresos:[],
+        egresos:[]
 
         
 })
 
-export const history = new mongoose(
+export const history = new model(
     "history", historySchema
 )
