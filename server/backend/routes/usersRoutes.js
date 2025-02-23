@@ -1,13 +1,13 @@
 import { Router } from "express"
-import { register, edit, deleteUser, login, getUserInfo } from "../controllers/userController.js"
+import usersController from "../controllers/usersController.js"
 
 const router = Router()
 
 // Rutas para los usuarios
-router.post("/register", register) // Registrar un nuevo usuario
-router.put("/edit", edit) // Editar los detalles de un usuario
-router.delete("/delete", deleteUser) // Eliminar un usuario
-router.post("/login", login) // Iniciar sesión de usuario
-router.get("/one", getUserInfo)
+router.post("/register", usersController.register) // Registrar un nuevo usuario
+router.put("/edit", usersController.edit) // Editar los detalles de un usuario
+router.delete("/delete", usersController.delete) // Eliminar un usuario
+router.post("/login", usersController.login) // Iniciar sesión de usuario
+router.get("/one", usersController.getUserInfo)
 
 export default router

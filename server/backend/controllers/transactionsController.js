@@ -1,5 +1,5 @@
 import { transacciones } from "../models/transactionsModel.js"
-import { accounts } from "../models/accountsModel.js"
+import { cuentas } from "../models/accountsModel.js"
 import { history } from "../models/historyModel.js" // pendiente
 
 export default {
@@ -7,7 +7,7 @@ export default {
         try {
 
             const { id_cuenta } = req.body
-            const cuenta = await accounts.findById(id_cuenta)
+            const cuenta = await cuentas.findById(id_cuenta)
             if ( !cuenta ) return res.status(400).json({ "msg": "no existe la cuenta" })
 
             const { tipo, descripcion, monto, fecha, informacion } = req.body
@@ -15,7 +15,7 @@ export default {
             
             // inc
             const op = tipo === 'ingreso' ? monto : -monto // por comprobar (creo si funciona)
-            await accounts.findByIdAndUpdate(id_cuenta, {
+            await cuentas.findByIdAndUpdate(id_cuenta, {
                 $inc: { 'informacion.balance': op }
             })
 

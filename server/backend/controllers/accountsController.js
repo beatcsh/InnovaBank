@@ -1,4 +1,4 @@
-import { cuentas } from "../models/cuentas.js"
+import { cuentas } from "../models/accountsModel.js"
 import { usuarios } from "../models/usuariosModel.js"
 
 export default {
