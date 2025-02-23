@@ -65,6 +65,7 @@ export default {
         try {
 
             const transaccion = await transacciones.findById(req.body._id)
+            if ( !transaccion ) return res.status(400).json({ "msg": "no existe la transaccion" })
             return res.status(200).json(transaccion)
             
         }  catch (err) {

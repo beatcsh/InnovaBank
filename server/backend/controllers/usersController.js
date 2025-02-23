@@ -45,15 +45,15 @@ export default {
 
     getUserInfo: async (req, res) => {
         try{
-            const id = req.query._id;
+            const id = req.query._id
             const user = await usuarios.findById(id, "-contraseña")
-            if(!user) return res.status(404).json({"msg": "Usuario no encontrado"});
+            if(!user) return res.status(404).json({"msg": "Usuario no encontrado"})
 
-            return res.status(200).json(user);
+            return res.status(200).json(user)
 
         }catch (err){
-            console.error(err);
-            return res.status(500).json({"msg": "Error en el servidor"});
+            console.error(err)
+            return res.status(500).json({"msg": "Error en el servidor"})
         }
     },
     edit: async (req, res) => {
