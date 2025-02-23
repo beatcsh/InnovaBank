@@ -1,4 +1,5 @@
 import { usuarios } from "../models/usuarios.js"
+import {cuentas} from "../models/accounts.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
@@ -41,6 +42,34 @@ export default {
             return res.status(500).json({ "msg": "error en el servidor" })
         }
     },
+
+    getUserInfo: async (req, res) => {
+        try{
+            const id = req.query._id;
+            const user = await usuarios.findById(id, "-contraseña")
+            if(!user) return res.status(404).json({"msg": "Usuario no encontrado"});
+
+            return res.status(200).json(user);
+
+        }catch (err){
+            console.error(err);
+            return res.status(500).json({"msg": "Error en el servidor"});
+        }
+    },
+
+    getAccountInfo: async (req, res) => {
+        try {
+            const id = req.query._id;
+            const account = await cuentas.findOne({ _id_usuario: id });
+            if (!account) return res.status(404).json({ "msg": "Cuenta no encontrada" });
+
+            return res.status(200).json(account);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ "msg": "Error en el servidor" });
+        }
+    },
+
     edit: async (req, res) => {
         try {
 
