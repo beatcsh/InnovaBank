@@ -62,13 +62,14 @@ export default {
             const id = req.query._id
             const user = await usuarios.findById(id)
             if ( !user ) return res.status(400).json({ "msg": "no hay usuario que coincida" })
+            console.log(user)
 
             user.nombre = req.body.nombre ? req.body.nombre : user.nombre
-            user.apePa = req.bodyuser.apePa ? req.bodyuser.apePa : user.apePa
+            user.apePa = req.body.apePa ? req.body.apePa : user.apePa
             user.apeMa = req.body.apeMa ? req.body.apeMa : user.apeMa
             user.curp = req.body.curp ? req.body.curp : user.curp
             user.rfc = req.body.rfc ? req.body.rfc : user.rfc
-            user.contrasena = req.body.contrasena ? await bcrypt.hash(req.body.contrasena, 10) : user.contrasena
+            user.contraseña = req.body.contraseña ? await bcrypt.hash(req.body.contraseña, 10) : user.contraseña
             user.direccion = req.body.direccion ? {
                     cp: user.cp = req.body.cp ? req.body.cp : user.cp,
                     calle: user.calle = req.body.calle ? req.body.calle : user.calle,
@@ -79,6 +80,7 @@ export default {
             } : user.direccion
 
             await usuarios.findByIdAndUpdate(id, user)
+            console.log(user)
             return res.status(200).json({ "msg": "actualizado con exito" })
 
         }  catch (err) {
