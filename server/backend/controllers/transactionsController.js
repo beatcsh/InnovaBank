@@ -53,8 +53,8 @@ export default {
     getAll: async (req, res) => {
         try {
 
-            const transacciones = await transacciones.find()
-            return res.status(200).json(transacciones)
+            const transacciones_f = await transacciones.find()
+            return res.status(200).json({transacciones_f})
 
         } catch (err) {
             console.log(err)
