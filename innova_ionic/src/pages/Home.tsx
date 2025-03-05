@@ -5,7 +5,7 @@ import './Home.css';
 const Home: React.FC = () => {
   return (
     <IonPage>
-      <div className='text-3xl'>nose</div>
+      <div className='text-3xl font-semibold text-blue-600 animate-'>nose</div>
     </IonPage>
   );
 };
