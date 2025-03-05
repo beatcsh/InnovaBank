@@ -1,8 +1,8 @@
 import { IonApp, IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Route, Redirect } from 'react-router-dom';
-import AnalisisdeGastos from './AnalisisdeGastos';
-import Elegibilidad from './Elegibilidad';
+import AnalisisdeGastos from '../pages/AnalisisdeGastos';
+import Elegibilidad from '../pages/Elegibilidad';
 
 const Home: React.FC = () => {
   return (
