@@ -35,6 +35,7 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+// no se para que deje hacer cosas
 const App: React.FC = () => (
   <IonApp className='bg-white'>
     <IonReactRouter>
@@ -46,7 +47,7 @@ const App: React.FC = () => (
           <AnalisisdeGastos />
         </Route>
         <Route exact path="/elegibilidad">
-          <Elegibilidad />
+          <Elegibilidad /> 
         </Route>
         <Route exact path="/mainbtn">
           <MainBtn />
