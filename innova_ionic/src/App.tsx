@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import { AnalisisdeGastos, Elegibilidad, FraudDetectionScreen, AccountHistoryScreen, Home, Login, MainBtn, Register, CreditResult, Solvencia } from './pages';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,12 +35,40 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+// no se para que deje hacer cosas
 const App: React.FC = () => (
-  <IonApp>
+  <IonApp className='bg-white'>
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home">
           <Home />
+        </Route>
+        <Route exact path="/analisis">
+          <AnalisisdeGastos />
+        </Route>
+        <Route exact path="/elegibilidad">
+          <Elegibilidad /> 
+        </Route>
+        <Route exact path="/mainbtn">
+          <MainBtn />
+        </Route>
+        <Route exact path="/register">
+          <Register />
+        </Route>
+        <Route exact path="/creditresult">
+          <CreditResult />
+        </Route>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route exact path="/fraudes">
+          <FraudDetectionScreen />
+        </Route>
+        <Route exact path="/historialcuenta">
+          <AccountHistoryScreen />
+        </Route>
+        <Route exact path="/solvencia">
+          <Solvencia />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
