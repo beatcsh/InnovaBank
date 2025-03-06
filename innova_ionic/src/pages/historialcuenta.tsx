@@ -8,7 +8,7 @@ type Transaction = {
   name: string;
   date: string;
   amount: number;
-};
+}; 
 
 const transactions: Transaction[] = [
   { id: '1', type: 'deposit', name: 'Montserrat Lozano', date: '31/01', amount: 500 },
