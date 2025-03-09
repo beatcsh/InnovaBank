@@ -54,7 +54,7 @@ export default {
         try {
 
             const transacciones_f = await transacciones.find()
-            return res.status(200).json({transacciones_f})
+            return res.status(200).send(transacciones_f)
 
         } catch (err) {
             console.log(err)
