@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { AnalisisdeGastos, Elegibilidad, FraudDetectionScreen, AccountHistoryScreen, Home, Login, MainBtn, Register, CreditResult, Solvencia } from './pages';
+import { AnalisisdeGastos, Elegibilidad, FraudDetectionScreen, PredictionChart, AccountHistoryScreen, Home, Login, MainBtn, Register, CreditResult, CreditResult2, Solvencia, Bienvenida, FrequentActions } from './pages';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -41,6 +41,9 @@ const App: React.FC = () => (
   <IonApp className='bg-white'>
     <IonReactRouter>
       <IonRouterOutlet>
+        <Route exact path="/bienvenida">
+          <Bienvenida />
+        </Route>
         <Route exact path="/home">
           <Home />
         </Route>
@@ -48,7 +51,7 @@ const App: React.FC = () => (
           <AnalisisdeGastos />
         </Route>
         <Route exact path="/elegibilidad">
-          <Elegibilidad /> 
+          <Elegibilidad />
         </Route>
         <Route exact path="/mainbtn">
           <MainBtn />
@@ -58,6 +61,12 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/creditresult">
           <CreditResult />
+        </Route>
+        <Route exact path="/frequent">
+          <FrequentActions />
+        </Route>
+        <Route exact path="/predicciones">
+          <PredictionChart />
         </Route>
         <Route exact path="/login">
           <Login />
@@ -71,14 +80,14 @@ const App: React.FC = () => (
         <Route exact path="/solvencia">
           <Solvencia />
         </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
+        <Route exact path="/resultado2solicitud">
+          <CreditResult />
+        </Route>
+        <Route exact path="/resultadosolicitud">
+          <CreditResult2 />
         </Route>
         <Route exact path="/">
-          <Redirect to="/resultado2solicitud" />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/resultadosolicitud" />
+          <Redirect to="/bienvenida" />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

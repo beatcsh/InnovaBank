@@ -1,75 +1,92 @@
-import React from 'react'; 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonText, IonButton, IonList, IonItem } from '@ionic/react';
-import { useHistory } from 'react-router-dom'; 
-
-type Transaction = {
-  id: string;
-  type: 'deposit' | 'transfer';
-  name: string;
-  date: string;
-  amount: number;
-}; 
-
-const transactions: Transaction[] = [
-  { id: '1', type: 'deposit', name: 'Montserrat Lozano', date: '31/01', amount: 500 },
-  { id: '2', type: 'transfer', name: 'Montserrat Lozano', date: '30/01', amount: -700 },
-  { id: '3', type: 'deposit', name: 'Nathalie Mireles', date: '30/01', amount: 200 },
-  { id: '4', type: 'transfer', name: 'Francisco Meléndez', date: '01/01', amount: 20000 },
-];
+import { useEffect, useState } from "react";
+import Header from "../components/Header";
+import axios from "axios";
 
 const AccountHistoryScreen: React.FC = () => {
-  const history = useHistory(); // Usar useHistory para navegación
 
-  return (
-    <div>
-      <div>
-        <div className="bg-white-600">
-          <h1 className="text-black text-center">Historial de la cuenta</h1>
-        </div>
+  const [data, setData] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://innovabank.onrender.com/transactions/all")
+        setData(response.data.transacciones_f)
+        console.log(response.data.transacciones_f)
+      } catch (err: any) {
+        console.log(err)
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(data)
+
+  const cards = data.map((transaction: any) => (
+    <div className="w-[100%] h-[115px] border border-gray-200 rounded-lg m-3 py-2 px-3 shadow-xl flex place-items-center justify-between">
+      <div className="grid grid-cols-1 w-[70%] gap-1">
+        <p className="font-semibold">{transaction.tipo.toUpperCase()}</p>
+        <p className="text-xs">{transaction.informacion.numero_cuenta}</p>
+        <p className="text-xs">{transaction.informacion.banco}</p>
+        <p className="text-xs">{transaction.descripcion} - {transaction.categoria.toUpperCase()}</p>
       </div>
-      <div className="ion-padding bg-white">
-        <div color="success" className="text-center">
-          <h2 className="text-lg font-bold mb-2 text-green-400">Saldo disponible: $20,001.00</h2>
-        </div>
-
-        <div
-          className="rounded-x1"
-        >
-          <div className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center mb-2">Añadir cuenta</div>
-        </div>
-
-        <div>
-          {transactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className={`'font-bold text-1xl py-3 rounded-lg mb-2 text-black ${transaction.amount < 0 ? 'bg-green-100' : 'bg-purple-100'}`}
-            >
-              <div className="font-semibold text-black">
-                {transaction.type === 'deposit' ? 'Depósito' : 'Transferencia'}
-              </div>
-              <div className="ml-2">{transaction.name} - {transaction.date}</div>
-              <div
-                className={`font-bold text-1x1 ml-auto ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}
-              >
-                {transaction.amount < 0 ? `-${transaction.amount}` : `+$ ${transaction.amount}`}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center">
-          Descargar estado de cuenta
-        </div>
-
-        <div
-          
-          className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center mt-3 "
-          onClick={() => history.push('/solvencia')} // Usa history.push para navegar
-        >
-          Ver Solvencia
-        </div>
+      <div className="grid grid-cols-1">
+        <p className={transaction.tipo.toLowerCase() === "ingreso" ? "text-green-500 font-bold" : "text-red-500 font-bold"}>
+          $ {transaction.monto}
+        </p>
       </div>
     </div>
+  ));
+
+
+  const balance = 20000
+
+  const alerta_categoria = (nombre: String) => {
+    console.log("Elegiste: ", nombre)
+  }
+
+  const categories = [
+    {
+      id: 1,
+      name: "Alimentos",
+      icon: <i className='text-xl text-violet-800 bx bxs-bowl-rice' ></i>
+    },
+    {
+      id: 2,
+      name: "Servicios",
+      icon: <i className='text-xl text-violet-800 bx bx-tv' ></i>
+    },
+    {
+      id: 3,
+      name: "Transferencias",
+      icon: <i className='text-xl text-violet-800 bx bx-transfer-alt' ></i>
+    }
+  ]
+
+  return (
+    <>
+      <div className="w-[100%] h-screen overflow-y-auto text-black">
+        <Header />
+        <div className="w-[100%] h-[50px] my-2 grid place-items-center">
+          <h2 className="!text-2xl !font-semibold">Historial de la cuenta</h2>
+        </div>
+        <div className="w-[100%] py-3 px-8 flex place-items-center justify-between">
+          <div className="p-3">
+            <p className="text-sm">Saldo disponible</p>
+            <p className="text-xl">$ {balance}</p>
+          </div>
+          <a href="/select"><button className="bg-violet-600 text-white w-[124px] h-[30px] !rounded-2xl">Cambiar tarjeta</button></a>
+        </div>
+        <h3 className="px-8 !text-sm !font-semibold">Selecciona una categoria</h3>
+        <div className="w-[100%] py-3 px-10 flex place-items-center space-x-10">
+          {categories.map((category) => (
+            <div onClick={() => alerta_categoria(category.name)}>{category.icon}</div>
+          ))}
+        </div>
+        <div className="w-[100%] py-3 px-8 grid place-items-center">
+          {cards}
+        </div>
+      </div>
+    </>
   );
 };
 

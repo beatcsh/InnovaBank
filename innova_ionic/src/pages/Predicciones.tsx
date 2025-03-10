@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { chevronBack } from 'ionicons/icons';
 import { Line } from 'react-chartjs-2';
-import 'tailwindcss/tailwind.css';
 
 const PredictionChart: React.FC = () => {
   const [selectedRange, setSelectedRange] = useState('1M');
