@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonButton, IonIcon, IonContent, IonInput, IonText, IonCard, IonCardContent } from "@ionic/react";
-import { chevronBack } from "ionicons/icons";
+import { IonIcon } from "@ionic/react"; 
+import { chevronBack, notificationsOutline } from "ionicons/icons";
 
 const CreditEligibility: React.FC = () => {
   const [income, setIncome] = useState("27000");
@@ -8,88 +8,99 @@ const CreditEligibility: React.FC = () => {
   const [debtDescription, setDebtDescription] = useState("");
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar className="flex justify-between p-3">
-          <IonButtons slot="start">
-            <IonButton>
-              <IonIcon icon={chevronBack} />
-            </IonButton>
-          </IonButtons>
-          <IonText className="text-lg font-semibold">VERIFICAR ELEGIBILIDAD DE CRÉDITO</IonText>
-        </IonToolbar>
-      </IonHeader>
+    <div className="min-h-screen bg-white">
+      <header className="bg-white shadow">
+        <div className="flex items-center justify-between p-4">
+          <button className="text-black">
+            <IonIcon icon={chevronBack} className="text-black w-6 h-6" />
+          </button>
 
-      <IonContent className="p-4">
-        {/* Ingreso de ganancia mensual */}
-        <IonCard className="p-3 bg-purple-100">
-          <IonText className="text-sm font-semibold">INGRESA TU GANANCIA MENSUAL</IonText>
-          <IonInput
+          <span className="text-black text-lg font-bold">
+            Verificar Elegibilidad de Crédito
+          </span>
+
+          <button className="text-black">
+            <IonIcon icon={notificationsOutline} className="text-black w-6 h-6" />
+          </button>
+        </div>
+      </header>
+
+      <main className="p-4">
+        <div className="p-3 bg-purple-100 rounded-lg">
+          <label className="text-sm font-semibold text-black">
+            INGRESA TU GANANCIA MENSUAL
+          </label>
+          <input
             type="number"
             value={income}
-            onIonChange={(e) => setIncome(e.detail.value!)}
-            className="w-full p-2 mt-2 border border-gray-300 rounded-md bg-white text-center"
+            onChange={(e) => setIncome(e.target.value)}
+            className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-center text-black focus:outline-none focus:border-purple-700"
+            placeholder="$"
           />
-        </IonCard>
+        </div>
 
-        {/* Historial Crediticio */}
         <div className="mt-4">
-          <IonText className="font-medium">HISTORIAL CREDITICIO</IonText>
-          <div className="flex items-center mt-2">
+          <h2 className="text-lg font-semibold text-black mb-2">
+            Historial Crediticio
+          </h2>
+          <div className="flex items-center justify-center mt-2">
             <span className="w-4 h-4 bg-green-400 rounded-full mr-2"></span>
-            <IonText>BUENO</IonText>
+            <span className="text-black">BUENO</span>
           </div>
-          <div className="flex items-center mt-2">
+          <div className="flex items-center justify-center mt-2">
             <span className="w-4 h-4 bg-yellow-400 rounded-full mr-2"></span>
-            <IonText>REGULAR</IonText>
+            <span className="text-black">REGULAR</span>
           </div>
-          <div className="flex items-center mt-2">
+          <div className="flex items-center justify-center mt-2">
             <span className="w-4 h-4 bg-red-500 rounded-full mr-2"></span>
-            <IonText>MALO</IonText>
+            <span className="text-black">MALO</span>
           </div>
         </div>
 
-        {/* Tienes deudas actuales */}
         <div className="mt-6">
-          <IonText className="font-medium">TIENES DEUDAS ACTUALES</IonText>
-          <div className="flex gap-4 mt-2">
-            <IonButton 
-              color={debt ? "dark" : "medium"} 
-              className="w-20 bg-purple-600 text-white"
+          <h2 className="text-lg font-semibold text-black mb-2">
+            ¿Tienes Deudas Actuales?
+          </h2>
+          <div className="flex gap-4 mt-2 justify-center">
+            <button
               onClick={() => setDebt(true)}
+              className={`w-16 h-16 aspect-square rounded-full border-2 border-purple-600 flex items-center justify-center ${
+                debt ? "bg-purple-600 text-white" : "bg-white text-purple-600"
+              } shadow-md hover:shadow-lg transition-shadow`}
             >
               Sí
-            </IonButton>
-            <IonButton 
-              color={!debt ? "dark" : "medium"} 
-              className="w-20 bg-purple-600 text-white"
+            </button>
+            <button
               onClick={() => setDebt(false)}
+              className={`w-16 h-16 aspect-square rounded-full border-2 border-purple-600 flex items-center justify-center ${
+                !debt ? "bg-purple-600 text-white" : "bg-white text-purple-600"
+              } shadow-md hover:shadow-lg transition-shadow`}
             >
               No
-            </IonButton>
+            </button>
           </div>
         </div>
 
-        {/* Descripción de deudas */}
         {debt && (
-          <IonCard className="p-3 mt-4 bg-purple-100">
-            <IonText className="text-sm font-semibold">DESCRIBE CUÁLES</IonText>
-            <IonInput
+          <div className="p-3 mt-4 bg-purple-100 rounded-lg">
+            <label className="text-sm font-semibold text-black">
+              DESCRIBE CUÁLES
+            </label>
+            <input
               type="text"
               value={debtDescription}
-              onIonChange={(e) => setDebtDescription(e.detail.value!)}
-              className="w-full p-2 mt-2 border border-gray-300 rounded-md bg-white"
+              onChange={(e) => setDebtDescription(e.target.value)}
+              className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-black focus:outline-none focus:border-purple-700"
               placeholder="Ej. Tarjeta de crédito, préstamo..."
             />
-          </IonCard>
+          </div>
         )}
 
-        {/* Botón Verificar */}
-        <IonButton expand="full" className="mt-6 bg-purple-600 text-white rounded-lg">
+        <button className="w-64 h-12 mt-6 bg-purple-600 text-white rounded-full shadow-md hover:bg-purple-700 hover:shadow-lg transition-colors flex items-center justify-center mx-auto">
           VERIFICAR
-        </IonButton>
-      </IonContent>
-    </IonPage>
+        </button>
+      </main>
+    </div>
   );
 };
 
