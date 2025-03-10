@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'; 
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonText, IonButton, IonList, IonItem } from '@ionic/react';
-import { useHistory } from 'react-router-dom'; // Importa el hook de React Router
+import { useHistory } from 'react-router-dom'; 
 
 type Transaction = {
   id: string;
@@ -21,84 +21,55 @@ const AccountHistoryScreen: React.FC = () => {
   const history = useHistory(); // Usar useHistory para navegación
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Historial de la cuenta</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding" style={{ backgroundColor: 'white' }}>
-        <IonText color="success" className="ion-text-center">
-          <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>Saldo disponible: $20,001.00</h2>
-        </IonText>
+    <div>
+      <div>
+        <div className="bg-white-600">
+          <h1 className="text-black text-center">Historial de la cuenta</h1>
+        </div>
+      </div>
+      <div className="ion-padding bg-white">
+        <div color="success" className="text-center">
+          <h2 className="text-lg font-bold mb-2 text-green-400">Saldo disponible: $20,001.00</h2>
+        </div>
 
-        <IonButton
-          expand="block"
-          style={{
-            backgroundColor: 'purple',
-            padding: '10px',
-            borderRadius: '5px',
-            marginBottom: '10px',
-          }}
+        <div
+          className="rounded-x1"
         >
-          <IonText style={{ color: 'white', fontSize: '16px' }}>Añadir cuenta</IonText>
-        </IonButton>
+          <div className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center mb-2">Añadir cuenta</div>
+        </div>
 
-        <IonList>
+        <div>
           {transactions.map((transaction) => (
-            <IonItem
+            <div
               key={transaction.id}
-              style={{
-                padding: '15px',
-                borderRadius: '5px',
-                marginBottom: '10px',
-                backgroundColor: transaction.amount < 0 ? '#ffe0e0' : '#e0ffe0',
-              }}
+              className={`'font-bold text-1xl py-3 rounded-lg mb-2 text-black ${transaction.amount < 0 ? 'bg-green-100' : 'bg-purple-100'}`}
             >
-              <IonText style={{ fontWeight: 'bold', fontSize: '14px' }}>
+              <div className="font-semibold text-black">
                 {transaction.type === 'deposit' ? 'Depósito' : 'Transferencia'}
-              </IonText>
-              <IonText>{transaction.name} - {transaction.date}</IonText>
-              <IonText
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  color: transaction.amount < 0 ? 'red' : 'green',
-                  marginLeft: 'auto',
-                }}
+              </div>
+              <div className="ml-2">{transaction.name} - {transaction.date}</div>
+              <div
+                className={`font-bold text-1x1 ml-auto ${transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}`}
               >
                 {transaction.amount < 0 ? `-${transaction.amount}` : `+$ ${transaction.amount}`}
-              </IonText>
-            </IonItem>
+              </div>
+            </div>
           ))}
-        </IonList>
+        </div>
 
-        <IonButton
-          expand="block"
-          style={{
-            padding: '10px',
-            backgroundColor: '#f0f0f0',
-            borderRadius: '5px',
-            marginTop: '10px',
-          }}
-        >
+        <div className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center">
           Descargar estado de cuenta
-        </IonButton>
+        </div>
 
-        <IonButton
-          expand="block"
-          color="primary"
-          style={{
-            padding: '10px',
-            borderRadius: '5px',
-            marginTop: '10px',
-          }}
-          onClick={() => history.push('/solvency-indicator')} // Usa history.push para navegar
+        <div
+          
+          className="bg-purple-700 rounded-xl py-2 px-6  hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center mt-3 "
+          onClick={() => history.push('/solvencia')} // Usa history.push para navegar
         >
           Ver Solvencia
-        </IonButton>
-      </IonContent>
-    </IonPage>
+        </div>
+      </div>
+    </div>
   );
 };
 
