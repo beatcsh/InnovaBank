@@ -17,6 +17,7 @@ const fraudTransactions: FraudTransaction[] = [
 
 const FraudDetectionScreen: React.FC = () => {
   return (
+
     <div className='bg-white rounded-full'>
       <nav className='w-[100%] h-[50px] px-4 '>
         <h2 className='text-black text-center font-bold'>Detección de Fraudes</h2>
@@ -32,6 +33,7 @@ const FraudDetectionScreen: React.FC = () => {
         <div className='space-y-5 grid grid-cols-1 place-items-auto'>
           {fraudTransactions.map((transaction) => (
             <div key={transaction.id} className=' font-bold bg-violet-200 rounded-xl py-2 px-6  hover:bg-violet-500 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 transition-all duration-300 shadow-xl text-center'>
+
               <h4 className='text-sm text-black'>
                 Compra en {transaction.store} - ${transaction.amount} -- {transaction.status}
               </h4>
@@ -40,13 +42,16 @@ const FraudDetectionScreen: React.FC = () => {
           ))}
         </div>
 
+
         <div className="text-black my-8 mx-8 text-sm font-bold">
+
           REPORTAR TRANSACCIÓN FRAUDULENTA
         </div>
 
         <div className='w-[100%] grid grid-cols-1 place-items-center'>
           <button
             className='w-[80%] h-[50px] bg-violet-500 font-bold text-xl !rounded-xl hover:bg-violet-700 focus:outline-2  focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700'
+
           >
             REPORTAR
           </button>
