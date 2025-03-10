@@ -2,7 +2,7 @@ import React from "react";
 import { IonIcon } from "@ionic/react"; 
 import { chevronBack } from "ionicons/icons";
 
-const CreditResult: React.FC = () => {
+const CreditResult2: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-white shadow">
@@ -32,9 +32,7 @@ const CreditResult: React.FC = () => {
           </label>
           <input
             type="text"
-            disabled
-            value="$0"
-            className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-center text-black focus:outline-none focus:border-purple-700"
+            className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-center !text-black focus:outline-none focus:border-purple-700"
           />
         </div>
 
@@ -59,4 +57,4 @@ const CreditResult: React.FC = () => {
   );
 };
 
-export default CreditResult;
+export default CreditResult2;

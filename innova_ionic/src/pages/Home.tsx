@@ -48,15 +48,21 @@ const Home: React.FC = () => {
             <div className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
               Cuentas
             </div>
-            <div className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
-              Indicador de Solvencia
-            </div>
-            <div className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
-              Movimientos Recientes
-            </div>
-            <div className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
-              Acciones Frecuentes
-            </div>
+            <a href="/solvencia" className='w-[80%]'>
+              <div className='w-[100%] text-black bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
+                Indicador de solvencia
+              </div>
+            </a>
+            <a href="/historialcuenta" className='w-[80%]'>
+              <div className='w-[100%] text-black bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
+                Movimientos Recientes
+              </div>
+            </a>
+            <a href="/frequent" className='w-[80%]'>
+              <div className='w-[100%] text-black bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
+                Acciones Frecuentes
+              </div>
+            </a>
             <div className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-xl text-center'>
               Analisis Inteligente
             </div>
