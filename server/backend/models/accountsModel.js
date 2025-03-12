@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose"
 
 const accountsSchema = new Schema({
-    numero: String,
-    id_usuario: String,
-    tipo: String,
+    numero: {type: String, required: true},
+    id_usuario: {type: String, required: true},
+    tipo: {type: String, required: true},
     informacion: {
         balance: { type: Number, required: true },
         no_tarjeta: {type:Number},

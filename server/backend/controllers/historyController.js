@@ -5,7 +5,7 @@ export default {
         try {
 
             const historiales = await history.find()
-            return res.status(200).json({ historiales })
+            return res.status(200).send(historiales)
 
         } catch (err) {
             console.log(err)
@@ -15,11 +15,11 @@ export default {
     getHistorial: async (req, res) => {
         try {
 
-            const id_cuenta = req.body.id_cuenta
+            const id_cuenta = req.query.id_cuenta
             const history = await history.findOne({ id_cuenta })
             if ( !history ) return res.status(400).json({ "msg": "no existe un historial" })
 
-            return res.status(200).json({ history })
+            return res.status(200).send(history)
 
         } catch (err) {
             console.log(err)

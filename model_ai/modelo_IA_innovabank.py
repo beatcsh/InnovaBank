@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from pydantic import BaseModel
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -64,8 +65,13 @@ plt.ylabel("Real")
 plt.title("Matriz de Confusión")
 plt.show()
 
-@app.get("/predict")
-def predict(ingresos: int, gastos: int, historial_crediticio: int):
-    datos = np.array([[ingresos, gastos, historial_crediticio]])
+class InputData(BaseModel):
+    ingresos: int
+    gastos: int
+    historial_crediticio: int
+
+@app.post("/predict")
+def predict(data: InputData):
+    datos = np.array([[data.ingresos, data.gastos, data.historial_crediticio]])
     prediccion = modelo.predict(datos)
     return {"solvente": int(prediccion[0])}
