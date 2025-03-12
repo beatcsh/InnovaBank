@@ -3,6 +3,7 @@ import {cuentas} from "../models/accountsModel.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+import axios from "axios"
 
 dotenv.config()
 
@@ -83,7 +84,7 @@ export default {
             console.log(user)
             return res.status(200).json({ "msg": "actualizado con exito" })
 
-        }  catch (err) {
+        } catch (err) {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }
@@ -96,7 +97,29 @@ export default {
             
             return res.status(200).json({ "msg": "se elimino con exito" })
 
-        }  catch (err) {
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json({ "msg": "error en el servidor" })
+        }
+    },
+    solvencyRequest: async(req, res) => {
+        try {
+
+            const { ingresos, gastos, historial_crediticio } = req.body
+            if (!ingresos || !gastos || !historial_crediticio) return res.status(400).json({ "msg": "faltan datos" })
+
+            const data = {
+                ingresos: ingresos,
+                gastos: gastos,
+                historial_crediticio: historial_crediticio
+            }
+
+            const response = await axios.post("http://127.0.0.1:8000/predict", data)
+            console.log(response.data)
+
+            res.status(200).send(response.data)
+
+        } catch (err) {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }
@@ -116,7 +139,7 @@ export default {
 
             return res.status(200).json({ token })
 
-        }  catch (err) {
+        } catch (err) {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }

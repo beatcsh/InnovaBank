@@ -1,6 +1,7 @@
 import { transacciones } from "../models/transactionsModel.js"
 import { cuentas } from "../models/accountsModel.js"
 import { history } from "../models/historyModel.js" // pendiente
+import mongoose from "mongoose"
 
 export default {
     create: async (req, res) => {
@@ -53,8 +54,13 @@ export default {
     getAll: async (req, res) => {
         try {
 
-            const transacciones_f = await transacciones.find()
-            return res.status(200).send(transacciones_f)
+            // esto se va a mandar asi en el encabezado, no necesitamos una funcion para visualizar todas las notas
+            const { id_cuenta } = req.query
+            if (!id_cuenta) return res.status(400).json({ "msg": "id requerido" })
+
+            const response = await transacciones.find({ id_cuenta })
+
+            return res.status(200).send(response) // se esta devolviendo como un objeto con array dentro, se dejara como response y se cambia a buscar solo de una cuenta
 
         } catch (err) {
             console.log(err)
@@ -66,7 +72,7 @@ export default {
 
             const transaccion = await transacciones.findById(req.body._id)
             if ( !transaccion ) return res.status(400).json({ "msg": "no existe la transaccion" })
-            return res.status(200).json(transaccion)
+            return res.status(200).send(transaccion)
             
         }  catch (err) {
             console.log(err)
