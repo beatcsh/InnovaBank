@@ -11,8 +11,8 @@ export default {
     register: async (req, res) => {
         try {
 
-            const { nombre, apePa, apeMa, curp, rfc, email, contrasena } = req.body
-            if ( !nombre || !apePa || !apeMa || !curp || !rfc || !email || !contrasena ) return res.status(400).json({ "msg": "error en una de las entradas" })
+            const { nombre, apePa, apeMa, curp, rfc, email, contraseña } = req.body
+            if ( !nombre || !apePa || !apeMa || !curp || !rfc || !email || !contraseña ) return res.status(400).json({ "msg": "error en una de las entradas" })
             const { cp, calle, numero, colonia, estado, localidad } = req.body.direccion
             if ( !cp || !calle || !numero || !colonia || !estado || !localidad ) return res.status(400).json({ "msg": "error en una de las entradas" })
 
@@ -23,7 +23,7 @@ export default {
                 curp: curp,
                 rfc: rfc,
                 email: email,
-                contrasena: await bcrypt.hash(contrasena, 10),
+                contraseña: await bcrypt.hash(contraseña, 10),
                 direccion: {
                     cp: cp,
                     calle: calle,
@@ -127,12 +127,12 @@ export default {
     login: async (req, res) => {
         try {
 
-            const { email, contrasena } = req.body
-            if ( !email || !contrasena ) return res.status(400).json({ "msg": "credenciales invalidas" })
+            const { email, contraseña } = req.body
+            if ( !email || !contraseña ) return res.status(400).json({ "msg": "credenciales invalidas" })
             
             const user = await usuarios.findOne({ email })
             if ( !user ) return res.status(400).json({ "msg": "credenciales invalidas" })
-            if ( !bcrypt.compare(contrasena, user.contrasena) ) return res.status(400).json({ "msg": "contraseña incorrecta" })
+            if ( !bcrypt.compare(contraseña, user.contraseña) ) return res.status(400).json({ "msg": "contraseña incorrecta" })
             
             const load = { _id: user._id, email: user.email }
             const token = await jwt.sign(load, process.env.private_key)
