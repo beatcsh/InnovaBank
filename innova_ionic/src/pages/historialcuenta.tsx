@@ -9,7 +9,7 @@ const AccountHistoryScreen: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://innovabank.onrender.com/transactions/all")
+        const response = await axios.get("http://localhost:4000/transactions/all")
         setData(response.data.response)
         console.log(response.data.response)
       } catch (err: any) {

@@ -1,13 +1,57 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
+
+interface LocationStorage {
+  token?: string;
+}
+
+interface decodedToken {
+  _id: string;
+  exp: number;
+  iat: number;
+}
 
 const Home: React.FC = () => {
+
+  const location = useLocation<LocationStorage>();
+  const token = location.state?.token || localStorage.getItem("authToken");
+  console.log(token)
+
   const [show, setShow] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleString());
-  const nombre = "Jesus Sanchez";
-  const saldo = 2000;
+  const [nombre, setNombre] = useState<string>("");
+  const [saldo, setSaldo] = useState<number>(0)
 
   useEffect(() => {
     setLastUpdated(new Date().toLocaleString());
+
+    const fetchAccountData = async () => {
+      if (token) {
+        try {
+          const decodedToken: decodedToken = jwtDecode(token);
+          const id_usuario = decodedToken._id;
+          console.log("id obtenido: " + id_usuario + " de tipo " + typeof (id_usuario));
+          const tarjeta = await axios.get("http://localhost:4000/accounts/one", {
+            params: { _id: id_usuario },
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          const user_info = await axios.get("http://localhost:4000/users/one", {
+            params: { _id: id_usuario },
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setSaldo(tarjeta.data.informacion.balance)
+          setNombre(user_info.data.nombre+" "+user_info.data.apePa)
+        } catch (err: any) {
+          console.log("no tenemos datos")
+        }
+      }
+    };
+
+    fetchAccountData();
+
   }, [show]);
 
   const showHandle = () => {
@@ -28,7 +72,7 @@ const Home: React.FC = () => {
         >
           &lt; {/* Este es el símbolo "<" */}
         </button>
-        <p className='text-xl'>"Hola, {nombre}"</p>
+        <p className='font-semibold text-xl'>Hola, {nombre}</p>
         <div className='w-[50px] h-[50px] rounded-full bg-purple-800 flex items-center justify-center text-white font-semibold'>
           DM
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import axios from "axios";
 
 interface IDireccion {
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
         console.log(data)
 
         try {
-            await axios.post("https://innovabank.onrender.com/users/register", data);
+            await axios.post("http://localhost:4000/users/register", data);
             alert("Registro exitoso");
             history.push("/login");
         } catch (err) {
