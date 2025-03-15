@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import axios from "axios";
 
 interface IDireccion {
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
         console.log(data)
 
         try {
-            await axios.post("https://innovabank.onrender.com/users/register", data);
+            await axios.post("http://localhost:4000/users/register", data);
             alert("Registro exitoso");
             history.push("/login");
         } catch (err) {
@@ -85,7 +85,7 @@ const Register: React.FC = () => {
     return (
         <>
             <div className='w-[100%] h-screen overflow-y-auto flex flex-col place-items-center space-y-2 bg-violet-700 pb-10'>
-                <div className='m-3 px-4 flex w-[100%]'>
+                <div className='px-4 flex w-[100%]'>
                     <a href="/"><i className='bx bxs-chevron-left text-4xl text-violet-950'></i></a>
                 </div>
                 <p className='font-bold text-2xl mb-4'>Registro</p>
@@ -100,9 +100,15 @@ const Register: React.FC = () => {
                     <input name="confirmPassword" type="password" onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirm password' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <p className='font-bold text-xl my-2'>Direccion</p>
                     <input onChange={onChange} value={data.direccion.calle} name="direccion.calle" type="text" placeholder='Calle' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
-                    <div className="w-[80%] grid place-items-center grid-cols-2">
-                        <input onChange={onChange} value={data.direccion.cp} name="direccion.cp" type="number" placeholder='Código Postal' className='w-[95%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
-                        <input onChange={onChange} value={data.direccion.numero} name="direccion.numero" type="number" placeholder='Número' className='w-[95%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
+                    <div className="w-[80%] grid place-items-center grid-cols-2 gap-2">
+                        <div>
+                            <p className="text-sm font-semibold p-1">Codigo Postal</p>
+                            <input onChange={onChange} value={data.direccion.cp} name="direccion.cp" type="number" placeholder='Código Postal' className='w-[100%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold p-1">Numero</p>
+                            <input onChange={onChange} value={data.direccion.numero} name="direccion.numero" type="number" placeholder='Número' className='w-[100%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
+                        </div>
                     </div>
                     <input onChange={onChange} value={data.direccion.colonia} name="direccion.colonia" type="text" placeholder='Colonia' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input onChange={onChange} value={data.direccion.estado} name="direccion.estado" type="text" placeholder='Estado' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
