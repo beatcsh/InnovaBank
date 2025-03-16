@@ -66,12 +66,15 @@ plt.title("Matriz de Confusión")
 # plt.show()
 
 class InputData(BaseModel):
-    ingresos: int
-    gastos: int
+    ingresos: float
+    gastos: float
+    balance: float
     historial_crediticio: int
 
 @app.post("/predict")
 def predict(data: InputData):
+    print(data)
     datos = np.array([[data.ingresos, data.gastos, data.historial_crediticio]])
+    percent = ((data.balance + data.ingresos) / (data.balance + data.ingresos + data.gastos + 1)) * 100
     prediccion = modelo.predict(datos)
-    return {"solvente": int(prediccion[0])}
+    return {"solvente": int(prediccion[0]), "percent": percent }

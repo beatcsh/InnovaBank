@@ -105,12 +105,13 @@ export default {
     solvencyRequest: async(req, res) => {
         try {
 
-            const { ingresos, gastos, historial_crediticio } = req.body
-            if (!ingresos || !gastos || !historial_crediticio) return res.status(400).json({ "msg": "faltan datos" })
+            const { ingresos, gastos, historial_crediticio, balance } = req.body
+            if (!ingresos || !gastos || !historial_crediticio || !balance) return res.status(400).json({ "msg": "faltan datos" })
 
             const data = {
                 ingresos: ingresos,
                 gastos: gastos,
+                balance: balance,
                 historial_crediticio: historial_crediticio
             }
 

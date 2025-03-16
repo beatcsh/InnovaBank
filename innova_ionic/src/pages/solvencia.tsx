@@ -46,23 +46,18 @@ const SolvencyIndicator: React.FC = () => {
           const ingresos = additions.data.ingresos || 0;
           const egresos = additions.data.egresos || 0;
 
-          setDiff(ingresos-egresos)
-
-          let percent = 0;
-          percent = ((balance + ingresos) / (balance + ingresos + egresos + 1)) * 100;
-          console.log(percent.toFixed(2))
-
-          setSolvencia(percent)
-
           const solvente = await axios.post("http://localhost:4000/users/solvency", {
-            ingresos: 50000,
-            gastos: 33000,
+            ingresos: ingresos,
+            gastos: egresos,
+            balance: balance,
             historial_crediticio: 700
           },);
 
           if (solvente.data.solvente === 1) {
             setSolvente(true)
           }
+
+          setSolvencia(solvente.data.percent)
 
         } catch (err: any) {
           console.log(err)
