@@ -39,7 +39,7 @@ const Login: React.FC = () => {
                     <img src="../assets/logo.jpeg" alt="innovalogo" className='w-[190px] rounded-full' />
                 </div>
                 <form className='w-[100%] grid grid-cols-1 place-items-center my-6 gap-5'>
-                    <input onChange={onChange} name="email" type="email" placeholder='Email' className='w-[80%] h-[50px] bg-white rounded-2xl text-black placeholder-gray-700 px-4' />
+                    <input onChange={onChange} name="email" type="email" placeholder='Email' className='w-[80%] h-[50px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input onChange={onChange} name="contraseña" type="password" placeholder='Password' className='w-[80%] h-[50px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <button onClick={onSubmit} type="button" className="bg-violet-900 font-semibold w-[80%] h-[50px] !rounded-2xl text-white hover:bg-violet-600 transition-all duration-500">
                         Iniciar Sesion
