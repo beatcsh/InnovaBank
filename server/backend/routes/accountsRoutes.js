@@ -7,5 +7,6 @@ const router = Router()
 router.post("/add", accountsController.add) // Agregar ingreso o gasto
 router.delete("/delete", accountsController.delete) // Eliminar transacción
 router.get("/one", accountsController.getAccountInfo)
+router.get("/all", accountsController.getaccounts)
 
 export default router

@@ -59,5 +59,23 @@ export default {
             console.error(err)
             return res.status(500).json({ "msg": "Error en el servidor" })
         }
+    },
+    getaccounts: async (req, res) => {
+        try {
+            const { _id } = req.query;
+
+            // Convierte el _id a ObjectId
+            const objectId = new mongoose.Types.ObjectId(_id);
+
+            const accounts = await cuentas.find({ id_usuario: objectId });
+            if (!accounts) {
+                return res.status(404).json({ "msg": "Cuentas no encontradas" });
+            }
+
+            return res.status(200).send(accounts);
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json({ "msg": "Error en el servidor" })
+        }
     }
 }

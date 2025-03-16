@@ -63,7 +63,7 @@ sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicción")
 plt.ylabel("Real")
 plt.title("Matriz de Confusión")
-plt.show()
+# plt.show()
 
 class InputData(BaseModel):
     ingresos: int

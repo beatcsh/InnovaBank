@@ -101,7 +101,7 @@ const AccountHistoryScreen: React.FC = () => {
         <div className="w-[100%] py-3 px-8 flex place-items-center justify-between">
           <div className="p-3">
             <p className="text-sm">Saldo disponible</p>
-            <p className="text-xl">$ {balance}</p>
+            <p className="text-xl font-semibold">$ {balance.toFixed(2)}</p>
           </div>
           <a href="/select"><button className="bg-violet-600 text-white w-[124px] h-[30px] !rounded-2xl">Cambiar tarjeta</button></a>
         </div>

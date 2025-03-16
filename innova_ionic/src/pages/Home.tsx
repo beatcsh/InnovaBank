@@ -60,24 +60,13 @@ const Home: React.FC = () => {
     setShow(!show);
   };
 
-  const goBack = () => {
-    window.history.back();
-  };
-
   return (
     <div className='w-[100%] h-screen overflow-y-auto bg-white !text-black'>
       <nav className='w-[100%] py-3 px-5 flex place-items-center justify-between'>
         {/* Botón de retroceso sin fondo y con ícono "<" */}
-        <button
-          onClick={goBack}
-          className='text-2xl !text-black hover:text-purple-800 focus:outline-none'
-        >
-          &lt; {/* Este es el símbolo "<" */}
-        </button>
+        <a href="/"><i className='bx bx-chevron-left text-4xl !text-black'></i></a>
         <p className='font-semibold text-xl'>Hola, {nombre}</p>
-        <div className='w-[50px] h-[50px] rounded-full bg-purple-800 flex items-center justify-center text-white font-semibold'>
-          DM
-        </div>
+        <a href="/info-user"><img src='../assets/logo.jpeg' alt='avatar' className='w-[50px] rounded-full' /></a>
       </nav>
 
       <main className='w-[100%] grid grid-cols-1 place-items-center gap-6 my-4'>
@@ -95,7 +84,7 @@ const Home: React.FC = () => {
 
               {/* Saldo al lado de VISA */}
               <div className="text-sm font-semibold">
-                ${show ? saldo : "***"}
+                ${show ? saldo.toFixed(2) : "***"}
               </div>
             </div>
 
@@ -146,13 +135,13 @@ const Home: React.FC = () => {
             </div>
           </a>
 
-          <a href="/acciones-frecuentes" className="w-[80%] !text-black">
+          <a href="/frequent" className="w-[80%] !text-black">
             <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
               Acciones Frecuentes
             </div>
           </a>
 
-          <a href="/analisis-inteligente" className="w-[80%] !text-black">
+          <a href="/analisis" className="w-[80%] !text-black">
             <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
               Análisis Inteligente
             </div>

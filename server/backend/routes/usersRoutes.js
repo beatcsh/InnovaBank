@@ -9,6 +9,6 @@ router.put("/edit", usersController.edit) // Editar los detalles de un usuario
 router.delete("/delete", usersController.delete) // Eliminar un usuario
 router.post("/login", usersController.login) // Iniciar sesión de usuario
 router.get("/one", usersController.getUserInfo) // tomar info de un solo usuario
-router.get("/solvency", usersController.solvencyRequest) // conexion a el analisis de solvencia
+router.post("/solvency", usersController.solvencyRequest) // conexion a el analisis de solvencia
 
 export default router
