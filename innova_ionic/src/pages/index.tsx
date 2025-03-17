@@ -1,4 +1,3 @@
-export {default as AnalisisdeGastos} from "./AnalisisdeGastos";
 export {default as Elegibilidad} from "./Elegibilidad";
 export {default as FraudDetectionScreen} from "./fraudes";
 export {default as AccountHistoryScreen} from "./historialcuenta";
@@ -11,4 +10,3 @@ export {default as CreditResult} from "./ResultadoSolicitud";
 export {default as Solvencia} from "./solvencia";
 export {default as Bienvenida} from "./Bienvenida";
 export {default as FrequentActions} from "./FrequentActions";
-export {default as PredictionChart} from "./Predicciones";

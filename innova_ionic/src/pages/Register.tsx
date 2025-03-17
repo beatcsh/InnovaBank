@@ -19,6 +19,7 @@ interface IUser {
     rfc: string;
     email: string;
     contraseña: string;
+    telefono: string;
     direccion: IDireccion;
 }
 
@@ -33,6 +34,7 @@ const Register: React.FC = () => {
         rfc: "",
         email: "",
         contraseña: "",
+        telefono: "",
         direccion: {
             cp: 0,
             calle: "",
@@ -96,6 +98,7 @@ const Register: React.FC = () => {
                     <input onChange={onChange} value={data.curp} name="curp" type="text" placeholder='CURP' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input onChange={onChange} value={data.rfc} name="rfc" type="text" placeholder='RFC' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input onChange={onChange} value={data.email} name="email" type="email" placeholder='Email' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
+                    <input onChange={onChange} value={data.telefono} name="telefono" type="text" placeholder='Telefono' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input onChange={onChange} value={data.contraseña} name="contraseña" type="password" placeholder='Password' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <input name="confirmPassword" type="password" onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirm password' className='w-[80%] h-[45px] bg-white rounded-2xl !text-black placeholder-gray-700 px-4' />
                     <p className='font-bold text-xl my-2'>Direccion</p>

@@ -46,6 +46,8 @@ const SolvencyIndicator: React.FC = () => {
           const ingresos = additions.data.ingresos || 0;
           const egresos = additions.data.egresos || 0;
 
+          setDiff(ingresos-egresos);
+
           const solvente = await axios.post("http://localhost:4000/users/solvency", {
             ingresos: ingresos,
             gastos: egresos,
@@ -71,7 +73,7 @@ const SolvencyIndicator: React.FC = () => {
   console.log(solvente)
 
   return (
-    <div>
+    <div className="w-[100%] h-screen overflow-y-auto">
       <Header />
       <div className="">
         <nav className='w-[100%] h-[50px] px-4 '>

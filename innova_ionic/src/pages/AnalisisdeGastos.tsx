@@ -1,121 +1,191 @@
-import React from "react";
-import { IonIcon } from "@ionic/react"; 
-import { chevronBack, notificationsOutline } from "ionicons/icons";
+import React, { useState, useEffect } from "react";
+import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
+import Header from "../components/Header";
+import { useLocation } from 'react-router';
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
-const ExpenseAnalysis: React.FC = () => {
-  const score = 711;
-  const min = 400;
-  const max = 850;
+interface decodedToken {
+  _id: string;
+  exp: number;
+  iat: number;
+}
 
-  const radius = 40;
-  const circumference = 2 * Math.PI * radius;
-  const percentage = ((score - min) / (max - min)) * 100;
-  const strokeDashoffset = circumference - (circumference * percentage) / 100;
+interface LocationStorage {
+  token?: string;
+}
 
-  const angle = (percentage / 100) * 180 - 90;
-  const pointX = 50 + radius * Math.cos((angle * Math.PI) / 180);
-  const pointY = 50 + radius * Math.sin((angle * Math.PI) / 180);
+const GastosIngresos: React.FC = () => {
+  const [selected, setSelected] = useState<"gastos" | "ingresos">("gastos");
+  const [selectedMonth, setSelectedMonth] = useState<string>("01");
+  const [selectedYear, setSelectedYear] = useState<string>("2024");
+  const [data, setData] = useState<any[]>([]);
+  const [balanceEstimate, setBalanceEstimate] = useState<number>(0);
+  const location = useLocation<LocationStorage>();
+  const token = location.state?.token || localStorage.getItem("authToken");
+  const [ingresos, setIngresos] = useState<any[]>([]);
+  const [gastos, setGastos] = useState<any[]>([]);
+
+  const months = [
+    { label: "Enero", value: "01" },
+    { label: "Febrero", value: "02" },
+    { label: "Marzo", value: "03" },
+    { label: "Abril", value: "04" },
+    { label: "Mayo", value: "05" },
+    { label: "Junio", value: "06" },
+    { label: "Julio", value: "07" },
+    { label: "Agosto", value: "08" },
+    { label: "Septiembre", value: "09" },
+    { label: "Octubre", value: "10" },
+    { label: "Noviembre", value: "11" },
+    { label: "Diciembre", value: "12" },
+  ];
+
+  const years = Array.from({ length: 11 }, (_, i) => 2015 + i);
+
+  const COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#F44336"];
+
+  const fetchData = async () => {
+    if (token) {
+      try {
+        const decodedToken: decodedToken = jwtDecode(token);
+        const id_usuario = decodedToken._id;
+        console.log("id obtenido: " + id_usuario + " de tipo " + typeof (id_usuario));
+
+        const id_tarjeta = localStorage.getItem("id_tarjeta");
+        const transacciones = await axios.get("http://localhost:4000/transactions/all", {
+          params: { id_cuenta: id_tarjeta },
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        // pa filtrar las transacciones por tipo (ingresos o gastos)
+        const ingresosData = transacciones.data.filter((item: any) => item.tipo === "ingreso");
+        const gastosData = transacciones.data.filter((item: any) => item.tipo === "gasto");
+
+        setIngresos(ingresosData);
+        setGastos(gastosData);
+
+        // dependiendo de lo que selecciones, muestra los ingresos o gastos
+        const selectedData = selected === "ingresos" ? ingresosData : gastosData;
+        setData(selectedData);
+
+        // calculacion xd del balance estimado
+        const totalIngresos = ingresosData.reduce((acc: number, item: any) => acc + item.monto, 0);
+        const totalGastos = gastosData.reduce((acc: number, item: any) => acc + item.monto, 0);
+        setBalanceEstimate(totalIngresos - totalGastos);
+      } catch (err: any) {
+        console.log(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [selected, selectedMonth, selectedYear]);
 
   return (
-    <div className="bg-white min-h-screen">
-      <header className="bg-white shadow">
-        <div className="flex items-center justify-between p-4">
-          <button className="text-black">
-            <IonIcon icon={chevronBack} className="text-black w-6 h-6" />
-          </button>
+    <div className="bg-white text-black w-[100%] h-[100vh] overflow-y-auto !mb-10 !mx-2">
+      <Header />
 
-          <span className="text-black text-lg font-bold">Análisis de Gastos</span>
+      <div className="flex justify-center gap-4 mt-5">
+        <button
+          className={`w-30 h-8 px-6 py-2 !rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${selected === "gastos" ? "bg-purple-500 text-white" : "bg-purple-200 text-gray-700"
+            }`}
+          onClick={() => setSelected("gastos")}
+        >
+          💸 Gastos
+        </button>
 
-          <div className="flex items-center gap-4">
-            <button className="text-black">
-              <IonIcon icon={notificationsOutline} className="text-black w-6 h-6" />
-            </button>
+        <button
+          className={`w-30 h-8 px-6 py-2 !rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${selected === "ingresos" ? "bg-purple-500 text-white" : "bg-purple-200 text-gray-700"
+            }`}
+          onClick={() => setSelected("ingresos")}
+        >
+          💰 Ingresos
+        </button>
+      </div>
 
-            <button className="flex items-center justify-center w-8 h-8 bg-purple-800 rounded-full text-white font-semibold">
-              NM
-            </button>
-          </div>
+      <div className="flex justify-between items-center p-4 mt-4">
+        <div className="flex flex-col">
+          <label className="font-semibold">Mes</label>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="border border-gray-300 p-2 rounded-lg"
+          >
+            {months.map((month) => (
+              <option key={month.value} value={month.value}>
+                {month.label}
+              </option>
+            ))}
+          </select>
         </div>
-      </header>
 
-      <main className="p-4">
-        <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-          <div className="flex flex-col items-center">
-            <div className="relative w-40 h-40">
-              <svg
-                viewBox="0 0 100 100"
-                className="absolute top-0 left-0 w-full h-full"
-              >
-                <path
-                  d="M20,80 A40,40 0 1,1 80,80"
-                  stroke="#E0E0E0"
-                  strokeWidth="6"
-                  fill="none"
-                  strokeLinecap="round"
+        <div className="flex flex-col">
+          <label className="font-semibold">Año</label>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="border border-gray-300 p-2 rounded-lg"
+          >
+            {years.map((year) => (
+              <option key={year} value={year.toString()}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="flex justify-center mt-6">
+        {data.length > 0 ? (
+          <PieChart width={320} height={320}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={110}
+              innerRadius={60}
+              paddingAngle={3}
+              dataKey="value"
+              isAnimationActive={true}
+              animationDuration={1000}
+            >
+              {data.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                  style={{ filter: "drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.3))" }}
                 />
+              ))}
+            </Pie>
+            <Tooltip contentStyle={{ backgroundColor: "#6B21A8", color: "#FFFFFF", borderRadius: "8px", boxShadow: "0 0 8px rgba(0,0,0,0.3)", padding: "8px" }} />
+            <Legend
+              iconSize={12}
+              layout="horizontal"
+              align="center"
+              verticalAlign="bottom"
+              wrapperStyle={{ color: "#4B5563", fontSize: "14px" }}
+            />
+          </PieChart>
+        ) : (
+          <p className="text-gray-500 text-center mt-10">No hay datos disponibles</p>
+        )}
+      </div>
 
-                <defs>
-                  <linearGradient id="scoreGradient">
-                    <stop offset="0%" stopColor="#E91E63" />
-                    <stop offset="50%" stopColor="#9C27B0" />
-                    <stop offset="100%" stopColor="#2196F3" />
-                  </linearGradient>
-                </defs>
-
-                <path
-                  d="M20,80 A40,40 0 1,1 80,80"
-                  stroke="url(#scoreGradient)"
-                  strokeWidth="6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                />
-
-                <circle cx={pointX} cy={pointY} r="3" fill="red" />
-              </svg>
-
-              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-black">
-                {score}
-              </span>
-            </div>
-
-            <div className="flex justify-between w-full mt-2">
-              <span className="text-gray-500 text-sm">{min}</span>
-              <span className="text-gray-500 text-sm">{max}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center mb-8">
-          <div className="flex items-center mb-2">
-            <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
-            <span className="text-black">BUENO</span>
-          </div>
-          <div className="flex items-center mb-2">
-            <span className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>
-            <span className="text-black">MODERADO</span>
-          </div>
-          <div className="flex items-center">
-            <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
-            <span className="text-black">MALO</span>
-          </div>
-        </div>
-
-        <div className="bg-purple-100 rounded-lg p-4 mb-6">
-          <p className="text-black text-center">
-            Saldo disponible: <strong>$12,500.00 MXN</strong>
+      <div className="flex justify-center items-center pt-8 pb-10 shadow-2xl">
+        <div className="rounded-2xl bg-purple-300 w-64 p-4 shadow-2xl">
+          <p className="w-full text-lg font-semibold text-center">
+            Diferencia entre Ingresos y Gastos:{" "}
+            <span className={balanceEstimate >= 0 ? "text-green-500" : "text-red-500"}>
+              ${balanceEstimate.toFixed(2)}
+            </span>
           </p>
         </div>
-
-        <div className="bg-purple-100 rounded-lg p-4">
-          <p className="text-black text-center italic">
-            "Reduce tu gasto en entretenimiento un 10% y ahorras $500 al mes."
-          </p>
-        </div>
-      </main>
+      </div>
     </div>
   );
 };
 
-export default ExpenseAnalysis;
+export default GastosIngresos;

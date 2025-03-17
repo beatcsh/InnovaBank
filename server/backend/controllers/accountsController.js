@@ -60,6 +60,24 @@ export default {
             return res.status(500).json({ "msg": "Error en el servidor" })
         }
     },
+    addSolvency: async (req, res) => {
+        try {
+            const { _id } = req.query;
+
+            // Convierte el _id a ObjectId
+            const objectId = new mongoose.Types.ObjectId(_id);
+
+            const account = await cuentas.findOneAndUpdate({ id_usuario: objectId });
+            if (!account) {
+                return res.status(404).json({ "msg": "Cuenta no encontrada" });
+            }
+
+            return res.status(200).json(account);
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json({ "msg": "Error en el servidor" })
+        }
+    },
     getaccounts: async (req, res) => {
         try {
             const { _id } = req.query;

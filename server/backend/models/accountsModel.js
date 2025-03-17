@@ -4,6 +4,7 @@ const accountsSchema = new Schema({
     numero: {type: String, required: true},
     id_usuario: {type: String, required: true},
     tipo: {type: String, required: true},
+    solvencia: {type: Object, default:0},
     informacion: {
         balance: { type: Number, required: true },
         no_tarjeta: {type:Number},
