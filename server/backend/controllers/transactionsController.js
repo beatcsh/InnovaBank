@@ -9,11 +9,11 @@ export default {
 
             const { id_cuenta } = req.body
             const cuenta = await cuentas.findById(id_cuenta)
-            if ( !cuenta ) return res.status(400).json({ "msg": "no existe la cuenta" })
+            if (!cuenta) return res.status(400).json({ "msg": "no existe la cuenta" })
 
             const { tipo, descripcion, monto, fecha, informacion } = req.body
-            if ( !id_cuenta || !tipo || !descripcion || !fecha || !informacion ) return res.status(400).json({ "msg": "error con uno de los datos" })
-            
+            if (!id_cuenta || !tipo || !descripcion || !fecha || !informacion) return res.status(400).json({ "msg": "error con uno de los datos" })
+
             // inc
             const op = tipo === 'ingreso' ? monto : -monto // por comprobar (creo si funciona)
             await cuentas.findByIdAndUpdate(id_cuenta, {
@@ -31,13 +31,13 @@ export default {
 
             // aver
             if (tipo === 'ingreso') {
-                await history.findOneAndUpdate({ id_cuenta },{
+                await history.findOneAndUpdate({ id_cuenta }, {
                     $push: {
                         "ingresos": newTransaction._id
                     }
                 })
             } else {
-                await history.findOneAndUpdate({ id_cuenta },{
+                await history.findOneAndUpdate({ id_cuenta }, {
                     $push: {
                         "gasto": newTransaction._id
                     }
@@ -58,9 +58,15 @@ export default {
             const { id_cuenta } = req.query
             if (!id_cuenta) return res.status(400).json({ "msg": "id requerido" })
 
-            const response = await transacciones.find({ id_cuenta })
+            const objectId = new mongoose.Types.ObjectId(id_cuenta);
 
-            return res.status(200).send(response) // se esta devolviendo como un objeto con array dentro, se dejara como response y se cambia a buscar solo de una cuenta
+            console.log(objectId)
+            const transacciones_f = await transacciones.find({ id_cuenta: objectId });
+            if (!transacciones_f) {
+                return res.status(404).json({ "msg": "Cuenta no encontrada" });
+            }
+
+            return res.status(200).send(transacciones_f) // se esta devolviendo como un objeto con array dentro, se dejara como response y se cambia a buscar solo de una cuenta
 
         } catch (err) {
             console.log(err)
@@ -71,10 +77,10 @@ export default {
         try {
 
             const transaccion = await transacciones.findById(req.body._id)
-            if ( !transaccion ) return res.status(400).json({ "msg": "no existe la transaccion" })
+            if (!transaccion) return res.status(400).json({ "msg": "no existe la transaccion" })
             return res.status(200).send(transaccion)
-            
-        }  catch (err) {
+
+        } catch (err) {
             console.log(err)
             return res.status(500).json({ "msg": "error en el servidor" })
         }

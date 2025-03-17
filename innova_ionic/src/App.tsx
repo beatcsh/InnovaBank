@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { AnalisisdeGastos, Elegibilidad, FraudDetectionScreen, PredictionChart, AccountHistoryScreen, Home, Login, MainBtn, Register, CreditResult, CreditResult2, Solvencia, Bienvenida, FrequentActions } from './pages';
+import { Elegibilidad, FraudDetectionScreen, AccountHistoryScreen, Home, Login, MainBtn, Register, CreditResult, CreditResult2, Solvencia, Bienvenida, FrequentActions } from './pages';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,6 +33,11 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import CardsPage from './pages/Cuentas';
+import InfoPersonal from './pages/InformacionPersonal';
+import ChangesPass from './pages/cambioPass';
+import PrediccionesInversiones from './pages/prediccionesInversiones';
+import GastosIngresos from './pages/AnalisisdeGastos';
 
 setupIonicReact();
 
@@ -44,11 +49,17 @@ const App: React.FC = () => (
         <Route exact path="/bienvenida">
           <Bienvenida />
         </Route>
+        <Route exact path="/prediccionInversion">
+          <PrediccionesInversiones />
+        </Route>
+        <Route exact path="/cuentas">
+          <CardsPage />
+        </Route>
         <Route exact path="/home">
           <Home />
         </Route>
         <Route exact path="/analisis">
-          <AnalisisdeGastos />
+          <GastosIngresos />
         </Route>
         <Route exact path="/elegibilidad">
           <Elegibilidad />
@@ -65,14 +76,17 @@ const App: React.FC = () => (
         <Route exact path="/frequent">
           <FrequentActions />
         </Route>
-        <Route exact path="/predicciones">
-          <PredictionChart />
-        </Route>
         <Route exact path="/login">
           <Login />
         </Route>
         <Route exact path="/fraudes">
           <FraudDetectionScreen />
+        </Route>
+        <Route exact path="/info-user">
+          <InfoPersonal />
+        </Route>
+        <Route exact path="/cambio-contra">
+          <ChangesPass />
         </Route>
         <Route exact path="/historialcuenta">
           <AccountHistoryScreen />

@@ -8,6 +8,7 @@ const usuariosSchema = new Schema({
     rfc: { type: String, required: true },
     email: { type: String, required: true },
     contraseña: { type: String, required: true },
+    telefono: {type: String, required: true},
     direccion: {
         cp: { type: Number, required: true },
         calle: { type: String, required: true },

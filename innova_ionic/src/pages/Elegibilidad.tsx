@@ -1,106 +1,163 @@
-import React, { useState } from "react";
-import { IonIcon } from "@ionic/react"; 
-import { chevronBack, notificationsOutline } from "ionicons/icons";
+import { IonContent, IonPage } from "@ionic/react";
+import React, { useState, useEffect } from "react";
+import { ChevronLeft } from "lucide-react";
+import { useHistory } from "react-router";
 
 const CreditEligibility: React.FC = () => {
-  const [income, setIncome] = useState("27000");
-  const [debt, setDebt] = useState(false);
-  const [debtDescription, setDebtDescription] = useState("");
+  const history = useHistory();
+
+  const [ganancia, setGanancia] = useState(5000); // Ganancia obtenida de la base de datos
+  const [scoreCrediticio, setScoreCrediticio] = useState('');
+  const [tieneDeudas, setTieneDeudas] = useState(false);
+  const [deudasDescripcion, setDeudasDescripcion] = useState('');
+  const [autorizado, setAutorizado] = useState(false);
+
+  // Función para autorizar la consulta y recibir la respuesta
+  const autorizarConsulta = async () => {
+    setAutorizado(true);
+
+    try {
+      const response = await fetch('https://api.misitio.com/consulta_credito', {
+        method: 'POST',
+        body: JSON.stringify({ usuarioId: '1234' }), // Reemplaza con el ID del usuario
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      setScoreCrediticio(data.puntajeCrediticio);
+      setTieneDeudas(data.tieneDeudas);
+      setDeudasDescripcion(data.deudasDescripcion);
+    } catch (error) {
+      console.error("Error al obtener el puntaje crediticio", error);
+      // Maneja el error, tal vez con un mensaje de alerta
+    }
+  };
+
+
+  const handleSubmit = () => {
+    alert('Verificación completada con éxito.');
+  };
+
+  const obtenerColorSemaforo = (puntaje: number) => {
+    if (puntaje < 600) {
+      return "bg-red-500"; // Rojo
+    } else if (puntaje >= 600 && puntaje <= 750) {
+      return "bg-yellow-500"; // Amarillo
+    } else {
+      return "bg-green-500"; // Verde
+    }
+  };
+
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="bg-white shadow">
-        <div className="flex items-center justify-between p-4">
-          <button className="text-black">
-            <IonIcon icon={chevronBack} className="text-black w-6 h-6" />
+    <IonPage>
+      <IonContent>
+        <div className="flex justify-between items-center p-4">
+          <button onClick={() => history.goBack()}>
+            <ChevronLeft size={35} />
           </button>
-
-          <span className="text-black text-lg font-bold">
-            Verificar Elegibilidad de Crédito
-          </span>
-
-          <button className="text-black">
-            <IonIcon icon={notificationsOutline} className="text-black w-6 h-6" />
+          <h3 className="p-2">Verificar Elegibilidad</h3>
+          <button onClick={() => history.push("/InfoPersonal")}>
+            <img
+              className="w-10 h-10 rounded-full border-2 border-purple-500"
+              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              alt="Foto de perfil"
+            />
           </button>
         </div>
-      </header>
-
-      <main className="p-4">
-        <div className="p-3 bg-purple-100 rounded-lg">
-          <label className="text-sm font-semibold text-black">
-            INGRESA TU GANANCIA MENSUAL
-          </label>
-          <input
-            type="number"
-            value={income}
-            onChange={(e) => setIncome(e.target.value)}
-            className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-center text-black focus:outline-none focus:border-purple-700"
-            placeholder="$"
-          />
-        </div>
-
-        <div className="mt-4">
-          <h2 className="text-lg font-semibold text-black mb-2">
-            Historial Crediticio
-          </h2>
-          <div className="flex items-center justify-center mt-2">
-            <span className="w-4 h-4 bg-green-400 rounded-full mr-2"></span>
-            <span className="text-black">BUENO</span>
-          </div>
-          <div className="flex items-center justify-center mt-2">
-            <span className="w-4 h-4 bg-yellow-400 rounded-full mr-2"></span>
-            <span className="text-black">REGULAR</span>
-          </div>
-          <div className="flex items-center justify-center mt-2">
-            <span className="w-4 h-4 bg-red-500 rounded-full mr-2"></span>
-            <span className="text-black">MALO</span>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold text-black mb-2">
-            ¿Tienes Deudas Actuales?
-          </h2>
-          <div className="flex gap-4 mt-2 justify-center">
-            <button
-              onClick={() => setDebt(true)}
-              className={`w-16 h-16 aspect-square rounded-full border-2 border-purple-600 flex items-center justify-center ${
-                debt ? "bg-purple-600 text-white" : "bg-white text-purple-600"
-              } shadow-md hover:shadow-lg transition-shadow`}
-            >
-              Sí
-            </button>
-            <button
-              onClick={() => setDebt(false)}
-              className={`w-16 h-16 aspect-square rounded-full border-2 border-purple-600 flex items-center justify-center ${
-                !debt ? "bg-purple-600 text-white" : "bg-white text-purple-600"
-              } shadow-md hover:shadow-lg transition-shadow`}
-            >
-              No
-            </button>
-          </div>
-        </div>
-
-        {debt && (
-          <div className="p-3 mt-4 bg-purple-100 rounded-lg">
-            <label className="text-sm font-semibold text-black">
-              DESCRIBE CUÁLES
+        <div className="flex justify-center items-center mt-6  p-4">
+          <div className="!rounded-2xl bg-purple-300 w-64 p-4 shadow-2xl">
+            <label className="block text-sm font-medium text-gray-600 mb-2">
+              Tu ganancia mensual
             </label>
             <input
               type="text"
-              value={debtDescription}
-              onChange={(e) => setDebtDescription(e.target.value)}
-              className="w-full p-2 mt-2 border-2 border-purple-500 rounded-md bg-white text-black focus:outline-none focus:border-purple-700"
-              placeholder="Ej. Tarjeta de crédito, préstamo..."
+              value={`$${ganancia}`}
+              readOnly
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm bg-gray-100"
             />
           </div>
-        )}
+        </div>
 
-        <button className="w-64 h-12 mt-6 bg-purple-600 text-white rounded-full shadow-md hover:bg-purple-700 hover:shadow-lg transition-colors flex items-center justify-center mx-auto">
-          VERIFICAR
-        </button>
-      </main>
-    </div>
+        {!autorizado ? (
+          <div className="flex justify-center items-center mt-6 p-4 !rounded-2xl">
+            <button
+              onClick={autorizarConsulta}
+              className="w-64 h-10 py-3 bg-purple-600 text-white shadow-2xl !rounded-2xl hover:bg-purple-200 focus:outline-none mt-6"
+            >
+              Autorizar Consulta de Puntaje Crediticio
+            </button>
+          </div>
+        ) : (
+          <>
+
+            <div className="flex justify-center items-center mt-6 p-4">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Puntaje crediticio
+              </label>
+              <div className="w-64 p-3 border border-gray-300 rounded-md shadow-sm bg-purple-100 flex items-center">
+                <input
+                  type="text"
+                  value={scoreCrediticio}
+                  readOnly
+                  className="w-64"
+                />
+                <div
+                  className={`${obtenerColorSemaforo(Number(scoreCrediticio))} w-4 h-4 rounded-full ml-2`}
+                />
+              </div>
+            </div>
+
+            <div className="w-full flex justify-center items-center mt-2  !rounded-xl" >
+              <div className="mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
+                  ¿Tienes deudas actuales?
+                </label>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setTieneDeudas(true)}
+                    className={`w-28 h-10 shadow-2xl text-lg font-semibold !rounded-xl transition-all duration-300 transform ${tieneDeudas ? "bg-purple-500 text-white" : "bg-purple-200 text-gray-700"}`}
+                  >
+                    Sí
+                  </button>
+                  <button
+                    onClick={() => setTieneDeudas(false)}
+                    className={`w-28 h-10 shadow-2xl text-lg font-semibold !rounded-xl transition-all duration-300 transform ${!tieneDeudas ? "bg-purple-500 text-white" : "bg-purple-200 text-gray-700"}`}
+                  >
+                    No
+                  </button>
+                </div>
+
+                {tieneDeudas && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-600 mb-2">
+                      Detalles de tus deudas
+                    </label>
+                    <textarea
+                      value={deudasDescripcion}
+                      readOnly
+                      className="w-full p-3 border border-gray-300 rounded-md shadow-sm"
+                      placeholder="Detalles de tus deudas..."
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-center items-center mt-2 ">
+              <button
+                onClick={handleSubmit}
+                className="w-64 h-8 py-3 bg-purple-600 text-white !rounded-xl hover:bg-purple-400 focus:outline-none mt-6 shadow-xl"
+              >
+                Verificar
+              </button>
+            </div>
+          </>
+        )}
+      </IonContent>
+    </IonPage>
   );
 };
 

@@ -1,20 +1,52 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
+import { useLocation } from 'react-router';
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+
+interface decodedToken {
+  _id: string;
+  exp: number;
+  iat: number;
+}
+
+interface LocationStorage {
+  token?: string;
+}
 
 const AccountHistoryScreen: React.FC = () => {
 
   const [data, setData] = useState<any>([]);
+  const [balance, setBalance] = useState<any>(0)
+  const location = useLocation<LocationStorage>();
+  const token = location.state?.token || localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/transactions/all")
-        setData(response.data.response)
-        console.log(response.data.response)
-      } catch (err: any) {
-        console.log(err)
-      }
+      if (token) {
+        try {
+
+          const decodedToken: decodedToken = jwtDecode(token);
+          const id_usuario = decodedToken._id;
+          console.log("id obtenido: " + id_usuario + " de tipo " + typeof (id_usuario));
+          const tarjeta = await axios.get("http://localhost:4000/accounts/one", {
+            params: { _id: id_usuario },
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          setBalance(tarjeta.data.informacion.balance)
+
+          const id_tarjeta = localStorage.getItem("id_tarjeta");
+          const transacciones = await axios.get("http://localhost:4000/transactions/all", {
+            params: { id_cuenta: id_tarjeta },
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          setData(transacciones.data)
+        } catch (err: any) {
+          console.log(err)
+        }
+      };
     };
     fetchData();
   }, []);
@@ -36,9 +68,6 @@ const AccountHistoryScreen: React.FC = () => {
       </div>
     </div>
   ));
-
-
-  const balance = 20000
 
   const alerta_categoria = (nombre: String) => {
     console.log("Elegiste: ", nombre)
@@ -72,7 +101,7 @@ const AccountHistoryScreen: React.FC = () => {
         <div className="w-[100%] py-3 px-8 flex place-items-center justify-between">
           <div className="p-3">
             <p className="text-sm">Saldo disponible</p>
-            <p className="text-xl">$ {balance}</p>
+            <p className="text-xl font-semibold">$ {balance.toFixed(2)}</p>
           </div>
           <a href="/select"><button className="bg-violet-600 text-white w-[124px] h-[30px] !rounded-2xl">Cambiar tarjeta</button></a>
         </div>

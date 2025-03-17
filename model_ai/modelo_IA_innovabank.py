@@ -4,74 +4,77 @@ Created on Sat Feb 22 22:58:08 2025
 
 @author: monts
 """
-from fastapi import FastAPI # importamos fastAPI
+from fastapi import FastAPI
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
-from pydantic import BaseModel
+from sklearn.metrics import accuracy_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
+from pydantic import BaseModel
+from pymongo import MongoClient
 
-# se inicia la app
 app = FastAPI()
 
-#datos inventados
-np.random.seed(42)
-ingresos = np.random.randint(2000,100000, 1000)
-gastos = np.random.randint(1000, 9000, 1000)
-historial_crediticio = np.random.randint(300, 850, 1000) #esta es la score de credito
-solvente = np.where((ingresos - gastos > 2000) & (historial_crediticio > 600), 1 , 0)
+client = MongoClient("mongodb+srv://beatm:beat1234.@dbcluster.plpdo.mongodb.net/")
+db = client["innova_db"]
 
-#este es el dataframe
-df =pd.DataFrame({
-    "ingresos": ingresos,
-    "gastos": gastos,
-    "historial_crediticio": historial_crediticio,
-    "solvente": solvente
-    })
+coleccion_transacciones = db["transactions"]
+datos_transacciones = list(coleccion_transacciones.find())
+df_transacciones = pd.DataFrame(datos_transacciones)
 
-#aca preparamos los datos 
+# Asegurándonos de que "monto" sea numérico
+df_transacciones["monto"] = df_transacciones["monto"].astype(float)
 
-x = df [["ingresos","gastos","historial_crediticio",]]
-y = df["solvente"]
+# Generando las columnas de ingresos y gastos
+df_transacciones["ingresos"] = np.where(df_transacciones["tipo"] == "ingreso", df_transacciones["monto"], 0)
+df_transacciones["gastos"] = np.where(df_transacciones["tipo"] == "gasto", df_transacciones["monto"], 0)
 
-#dividimos el entrenamiento 
+# Agrupando por id_cuenta
+df_grouped = df_transacciones.groupby("id_cuenta")[["ingresos", "gastos"]].sum().reset_index()
+
+# Asignando un valor fijo de historial_crediticio (500) para todos los items
+df_grouped["historial_crediticio"] = 500
+
+# Creamos la columna "solvente" basado en los ingresos y gastos
+df_grouped["solvente"] = np.where((df_grouped["ingresos"] - df_grouped["gastos"] > 2000), 1, 0)
+
+# Definimos las variables independientes (X) y dependientes (Y)
+x = df_grouped[["ingresos", "gastos", "historial_crediticio"]]
+y = df_grouped["solvente"]
+
+# Dividimos los datos en entrenamiento y prueba
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
-#creamos el modelo 
+# Creamos y entrenamos el modelo de regresión logística
 modelo = LogisticRegression()
-
-#entrenamos el modelo
 modelo.fit(x_train, y_train)
 
-#hacemos predicciones con los datos de prueba 
+# Hacemos las predicciones
 y_pred = modelo.predict(x_test)
-
-#evaluamos la precision 
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Precisión del modelo: {accuracy:.2f}')
 
-#visualizamos los resultados
-# Crear la matriz de confusión
+# Mostramos la matriz de confusión
 cm = confusion_matrix(y_test, y_pred)
-
-# Graficarla
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicción")
 plt.ylabel("Real")
 plt.title("Matriz de Confusión")
 plt.show()
 
+# Definimos el modelo para la predicción a través de la API
 class InputData(BaseModel):
-    ingresos: int
-    gastos: int
+    ingresos: float
+    gastos: float
+    balance: float
     historial_crediticio: int
 
 @app.post("/predict")
 def predict(data: InputData):
+    print(data)
     datos = np.array([[data.ingresos, data.gastos, data.historial_crediticio]])
+    percent = ((data.balance + data.ingresos) / (data.balance + data.ingresos + data.gastos + 1)) * 100
     prediccion = modelo.predict(datos)
-    return {"solvente": int(prediccion[0])}
+    return {"solvente": int(prediccion[0]), "percent": percent}

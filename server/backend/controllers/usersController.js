@@ -11,8 +11,8 @@ export default {
     register: async (req, res) => {
         try {
 
-            const { nombre, apePa, apeMa, curp, rfc, email, contraseña } = req.body
-            if ( !nombre || !apePa || !apeMa || !curp || !rfc || !email || !contraseña ) return res.status(400).json({ "msg": "error en una de las entradas" })
+            const { nombre, apePa, apeMa, curp, rfc, email, contraseña, telefono } = req.body
+            if ( !nombre || !apePa || !apeMa || !curp || !rfc || !email || !contraseña || !telefono ) return res.status(400).json({ "msg": "error en una de las entradas" })
             const { cp, calle, numero, colonia, estado, localidad } = req.body.direccion
             if ( !cp || !calle || !numero || !colonia || !estado || !localidad ) return res.status(400).json({ "msg": "error en una de las entradas" })
 
@@ -23,6 +23,7 @@ export default {
                 curp: curp,
                 rfc: rfc,
                 email: email,
+                telefono: telefono,
                 contraseña: await bcrypt.hash(contraseña, 10),
                 direccion: {
                     cp: cp,
@@ -63,13 +64,15 @@ export default {
             const id = req.query._id
             const user = await usuarios.findById(id)
             if ( !user ) return res.status(400).json({ "msg": "no hay usuario que coincida" })
-            console.log(user)
+            
+            if (await bcrypt.compare(req.body.contraseña, user.contraseña)) return res.status(400).send("La contraseña no puede ser igual")
 
             user.nombre = req.body.nombre ? req.body.nombre : user.nombre
             user.apePa = req.body.apePa ? req.body.apePa : user.apePa
             user.apeMa = req.body.apeMa ? req.body.apeMa : user.apeMa
             user.curp = req.body.curp ? req.body.curp : user.curp
             user.rfc = req.body.rfc ? req.body.rfc : user.rfc
+            user.telefono = req.body.telefono ? req.body.telefono : user.telefono
             user.contraseña = req.body.contraseña ? await bcrypt.hash(req.body.contraseña, 10) : user.contraseña
             user.direccion = req.body.direccion ? {
                     cp: user.cp = req.body.cp ? req.body.cp : user.cp,
@@ -105,12 +108,13 @@ export default {
     solvencyRequest: async(req, res) => {
         try {
 
-            const { ingresos, gastos, historial_crediticio } = req.body
-            if (!ingresos || !gastos || !historial_crediticio) return res.status(400).json({ "msg": "faltan datos" })
+            const { ingresos, gastos, historial_crediticio, balance } = req.body
+            if (!ingresos || !gastos || !historial_crediticio || !balance) return res.status(400).json({ "msg": "faltan datos" })
 
             const data = {
                 ingresos: ingresos,
                 gastos: gastos,
+                balance: balance,
                 historial_crediticio: historial_crediticio
             }
 
@@ -132,7 +136,7 @@ export default {
             
             const user = await usuarios.findOne({ email })
             if ( !user ) return res.status(400).json({ "msg": "credenciales invalidas" })
-            if ( !bcrypt.compare(contraseña, user.contraseña) ) return res.status(400).json({ "msg": "contraseña incorrecta" })
+            if ( !await bcrypt.compare(contraseña, user.contraseña) ) return res.status(400).json({ "msg": "contraseña incorrecta" })
             
             const load = { _id: user._id, email: user.email }
             const token = await jwt.sign(load, process.env.private_key)

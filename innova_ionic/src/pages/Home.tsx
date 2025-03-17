@@ -23,6 +23,8 @@ const Home: React.FC = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleString());
   const [nombre, setNombre] = useState<string>("");
   const [saldo, setSaldo] = useState<number>(0)
+  const [numero, setNumero] = useState<number>(0)
+  const [fecha, setFecha] = useState<string>("12/33");
 
   useEffect(() => {
     setLastUpdated(new Date().toLocaleString());
@@ -42,8 +44,11 @@ const Home: React.FC = () => {
             params: { _id: id_usuario },
             headers: { Authorization: `Bearer ${token}` }
           });
+
+          localStorage.setItem("id_tarjeta", tarjeta.data._id);
           setSaldo(tarjeta.data.informacion.balance)
-          setNombre(user_info.data.nombre+" "+user_info.data.apePa)
+          setNumero(tarjeta.data.numero)
+          setNombre(user_info.data.nombre + " " + user_info.data.apePa)
         } catch (err: any) {
           console.log("no tenemos datos")
         }
@@ -58,54 +63,36 @@ const Home: React.FC = () => {
     setShow(!show);
   };
 
-  const goBack = () => {
-    window.history.back();
-  };
-
   return (
-    <div className='w-[100%] h-screen overflow-y-auto bg-white text-black'>
+    <div className='w-[100%] h-screen overflow-y-auto bg-white !text-black'>
       <nav className='w-[100%] py-3 px-5 flex place-items-center justify-between'>
         {/* Botón de retroceso sin fondo y con ícono "<" */}
-        <button
-          onClick={goBack}
-          className='text-2xl text-black hover:text-purple-800 focus:outline-none'
-        >
-          &lt; {/* Este es el símbolo "<" */}
-        </button>
+        <a href="/"><i className='bx bx-chevron-left text-4xl !text-black'></i></a>
         <p className='font-semibold text-xl'>Hola, {nombre}</p>
-        <div className='w-[50px] h-[50px] rounded-full bg-purple-800 flex items-center justify-center text-white font-semibold'>
-          DM
-        </div>
+        <a href="/info-user"><img src='../assets/logo.jpeg' alt='avatar' className='w-[50px] rounded-full' /></a>
       </nav>
 
       <main className='w-[100%] grid grid-cols-1 place-items-center gap-6 my-4'>
         <div>
-          <div className="bg-gradient-to-r from-purple-900 to-blue-900 text-white rounded-2xl p-6 w-80 shadow-2xl shadow-blue-900">
-            {/* Contenedor para VISA y saldo */}
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center space-x-1">
-                <div className="relative w-5 h-5">
-                  <div className="absolute bg-red-600 w-4 h-4 rounded-full"></div>
-                  <div className="absolute bg-orange-500 w-4 h-4 rounded-full left-2"></div>
+          <div> {/* esto es el de la tarjeta */}
+            <div className="bg-gradient-to-r from-purple-900 to-blue-900 text-white rounded-2xl p-6 w-80 shadow-xl">
+              <div className="flex justify-between items-center mb-10">
+                <div className="flex place-items-center space-x-1">
+                  <div className="relative w-5 h-5">
+                    <div className="absolute bg-red-600 w-4 h-4 rounded-full"></div>
+                    <div className="absolute bg-orange-500 w-4 h-4 rounded-full left-2"></div>
+                  </div>
+                  <span className="text-sm font-semibold pl-2">VISA</span>
                 </div>
-                <span className="text-sm font-semibold">VISA</span>
+                <span className="text-sm font-semibold">${show ? `${saldo}` : `*****`}</span>
               </div>
-
-              {/* Saldo al lado de VISA */}
-              <div className="text-sm font-semibold">
-                ${show ? saldo : "***"}
+              <div className="text-center text-xl text-md tracking-widest mb-6 font-semibold">
+                {numero.toString().replace(/\d{4}(?=\d)/g, "$& ")}
               </div>
-            </div>
-
-            {/* Número de tarjeta */}
-            <div className="text-center text-md tracking-widest mb-6 font-semibold">
-              .... .... .... 2104
-            </div>
-
-            {/* Nombre y fecha */}
-            <div className="flex justify-between text-sm font-semibold">
-              <span>{nombre}</span>
-              <span>28/33</span>
+              <div className="flex justify-between text-sm font-semibold mt-10">
+                <span>{nombre}</span>
+                <span>{fecha}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -126,11 +113,41 @@ const Home: React.FC = () => {
 
         {/* Lista de opciones */}
         <div className='w-[100%] grid grid-cols-1 place-items-center gap-6'>
-          {["Cuentas", "Indicador de Solvencia", "Movimientos Recientes", "Acciones Frecuentes", "Análisis Inteligente"].map((opcion, index) => (
-            <div key={index} className='w-[80%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center'>
-              {opcion}
+        <a href="/info-user" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Mi Información
             </div>
-          ))}
+          </a>
+
+          <a href="/historialcuenta" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Movimientos Recientes
+            </div>
+          </a>
+
+          <a href="/solvencia" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Indicador de Solvencia
+            </div>
+          </a>
+
+          <a href="/cuentas" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Cuentas
+            </div>
+          </a>
+
+          <a href="/frequent" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Acciones Frecuentes
+            </div>
+          </a>
+
+          <a href="/analisis" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Análisis Inteligente
+            </div>
+          </a>
         </div>
       </main>
     </div>

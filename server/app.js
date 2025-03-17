@@ -5,6 +5,7 @@ import cors from "cors"
 import userRoutes from "./backend/routes/usersRoutes.js" // Importar las rutas de usuarios
 import transactionRoutes from "./backend/routes/transactionsRoutes.js"
 import accountRoutes from "./backend/routes/accountsRoutes.js"
+import historyRoutes from "./backend/routes/historyRoutes.js"
 
 dotenv.config()
 
@@ -19,5 +20,6 @@ app.use(cors())
 app.use("/accounts", accountRoutes) // Ruta para manejar transacciones (ingresos/gastos)
 app.use("/users", userRoutes) // Rutas para usuarios
 app.use("/transactions", transactionRoutes)
+app.use("/history", historyRoutes)
 
 app.listen(4000, () => console.log("servidor funcionando"))

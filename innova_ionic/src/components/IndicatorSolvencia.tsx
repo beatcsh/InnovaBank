@@ -10,7 +10,7 @@ const Indicator: React.FC<Indicate> = ({ solvencia }) => {
         <>
             <div className="text-black">
                 <p>Tu nivel de solvencia esta en un:</p>
-                <p className="text-3xl font-bold m-8">{solvencia}%</p>
+                <p className="text-3xl font-bold m-8">{solvencia.toFixed(2)}%</p>
             </div>
             <div className="w-full h-6 bg-gray-300 rounded-full overflow-hidden">
                 <div
