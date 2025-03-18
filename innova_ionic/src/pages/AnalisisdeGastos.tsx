@@ -21,6 +21,7 @@ const GastosIngresos: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("2024");
   const [data, setData] = useState<any[]>([]);
   const [balanceEstimate, setBalanceEstimate] = useState<number>(0);
+  const [totalBalance, setTotalBalance] = useState<number>(0); // Nuevo estado para el total
   const location = useLocation<LocationStorage>();
   const token = location.state?.token || localStorage.getItem("authToken");
   const [ingresos, setIngresos] = useState<any[]>([]);
@@ -57,14 +58,30 @@ const GastosIngresos: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        // Filtrar las transacciones por tipo (ingresos o gastos)
-        const ingresosData = transacciones.data.filter((item: any) => item.tipo === "ingreso");
-        const gastosData = transacciones.data.filter((item: any) => item.tipo === "gasto");
+        const filterByDate = (data: any[]) => {
+          return data.filter((item: any) => {
+            const transactionDate = new Date(item.fecha);
+            const transactionMonth = (transactionDate.getMonth() + 1).toString().padStart(2, '0');
+            const transactionYear = transactionDate.getFullYear().toString();
+
+            return transactionMonth === selectedMonth && transactionYear === selectedYear;
+          });
+        };
+
+        const ingresosData = filterByDate(transacciones.data.filter((item: any) => item.tipo === "ingreso"));
+        const gastosData = filterByDate(transacciones.data.filter((item: any) => item.tipo === "gasto"));
 
         setIngresos(ingresosData);
         setGastos(gastosData);
 
-        // Agrupar los ingresos o gastos por categoría
+        // Calcula el total sin filtro por fecha
+        const totalIngresos = transacciones.data.filter((item: any) => item.tipo === "ingreso")
+          .reduce((acc: number, item: any) => acc + item.monto, 0);
+        const totalGastos = transacciones.data.filter((item: any) => item.tipo === "gasto")
+          .reduce((acc: number, item: any) => acc + item.monto, 0);
+        
+        setTotalBalance(totalIngresos - totalGastos); // Guardar el total
+
         const groupByCategory = (data: any[]) => {
           return data.reduce((acc: any, curr: any) => {
             if (acc[curr.categoria]) {
@@ -79,7 +96,6 @@ const GastosIngresos: React.FC = () => {
         const ingresosGrouped = groupByCategory(ingresosData);
         const gastosGrouped = groupByCategory(gastosData);
 
-        // Dependiendo de la selección, mostramos los datos agrupados
         const selectedData = selected === "ingresos"
           ? Object.keys(ingresosGrouped).map((category) => ({
               name: category,
@@ -92,21 +108,27 @@ const GastosIngresos: React.FC = () => {
 
         setData(selectedData);
 
-        // Cálculo del balance estimado
-        const totalIngresos = ingresosData.reduce((acc: number, item: any) => acc + item.monto, 0);
-        const totalGastos = gastosData.reduce((acc: number, item: any) => acc + item.monto, 0);
-        setBalanceEstimate(totalIngresos - totalGastos);
+        const totalFilteredIngresos = ingresosData.reduce((acc: number, item: any) => acc + item.monto, 0);
+        const totalFilteredGastos = gastosData.reduce((acc: number, item: any) => acc + item.monto, 0);
+        setBalanceEstimate(totalFilteredIngresos - totalFilteredGastos);
       } catch (err: any) {
         console.log(err);
       }
     }
   };
 
-  console.log("gastos: ",gastos)
-
   useEffect(() => {
     fetchData();
   }, [selected, selectedMonth, selectedYear]);
+
+  useEffect(() => {
+    if (!selectedMonth || !selectedYear) {
+      setData(selected === "ingresos"
+        ? ingresos.map((category: any) => ({ name: category.categoria, value: category.monto }))
+        : gastos.map((category: any) => ({ name: category.categoria, value: category.monto }))
+      );
+    }
+  }, [ingresos, gastos, selected]);
 
   return (
     <div className="bg-white text-black w-[100%] h-[100vh] overflow-y-auto !mb-10 !mx-2">
@@ -130,13 +152,13 @@ const GastosIngresos: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex justify-between items-center p-4 mt-4">
+      <div className="flex justify-center gap-[100px] items-center p-4 mt-4">
         <div className="flex flex-col">
           <label className="font-semibold">Mes</label>
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="border border-gray-300 p-2 rounded-lg"
+            className="border border-gray-500 shadow-lg p-2 !my-2 px-2 rounded-lg"
           >
             {months.map((month) => (
               <option key={month.value} value={month.value}>
@@ -151,7 +173,7 @@ const GastosIngresos: React.FC = () => {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="border border-gray-300 p-2 rounded-lg"
+            className="border border-gray-500 shadow-lg p-2 !my-2 px-2 rounded-lg"
           >
             {years.map((year) => (
               <option key={year} value={year.toString()}>
@@ -185,9 +207,9 @@ const GastosIngresos: React.FC = () => {
                 />
               ))}
             </Pie>
-            <Tooltip contentStyle={{ backgroundColor: "#6B21A8", color: "#FFFFFF", borderRadius: "8px", boxShadow: "0 0 8px rgba(0,0,0,0.3)", padding: "8px" }} />
+            <Tooltip contentStyle={{ backgroundColor: "#c28eed", color: "#FFFFFF", borderRadius: "8px", boxShadow: "0 0 8px rgba(0,0,0,0.3)", padding: "8px" }} />
             <Legend
-              iconSize={12}
+              iconSize={14}
               layout="horizontal"
               align="center"
               verticalAlign="bottom"
@@ -195,16 +217,16 @@ const GastosIngresos: React.FC = () => {
             />
           </PieChart>
         ) : (
-          <p className="text-gray-500 text-center mt-10">No hay datos disponibles</p>
+          <p className="text-gray-500 text-center text-xl mt-10 h-[210px] w-[220px]">No tienes transacciones registradas en este mes c:</p>
         )}
       </div>
 
       <div className="flex justify-center items-center pt-8 pb-10 shadow-2xl">
         <div className="rounded-2xl bg-purple-300 w-64 p-4 shadow-2xl">
           <p className="w-full text-lg font-semibold text-center">
-            Diferencia entre Ingresos y Gastos:{" "}
-            <span className={balanceEstimate >= 0 ? "text-green-500" : "text-red-500"}>
-              ${balanceEstimate.toFixed(2)}
+            Diferencia entre Ingresos y Gastos (Total):{" "}
+            <span className={totalBalance >= 0 ? "text-green-500" : "text-red-500"}>
+              ${totalBalance.toFixed(2)}
             </span>
           </p>
         </div>

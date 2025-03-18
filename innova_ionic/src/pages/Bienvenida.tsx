@@ -16,9 +16,9 @@ const Bienvenida: React.FC = () => {
                     {/* Contenido */}
                     <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-6">
                         <img
-                            src="/public/assets/logo.jpeg"
+                            src="/public/assets/logo.png"
                             alt="InnovaBank Logo"
-                            className="w-32 h-32 mb-6 "
+                            className="w-44 h-48 mb-6 !drop-shadow-2xl"
                         />
 
                         <h1 className="text-5xl font-bold">
