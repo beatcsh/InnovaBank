@@ -108,7 +108,7 @@ const ChangesPass: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-white">
+        <div className="flex flex-col h-screen overflow-y-auto bg-white">
             <header className="p-4 flex items-center bg-white shadow-md">
                 <Link to="/info-user" className="text-gray-700">
                     <ChevronLeft size={35} />

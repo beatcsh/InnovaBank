@@ -2,7 +2,7 @@ import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import cors from "cors"
-import userRoutes from "./backend/routes/usersRoutes.js" // Importar las rutas de usuarios
+import userRoutes from "./backend/routes/usersRoutes.js" 
 import transactionRoutes from "./backend/routes/transactionsRoutes.js"
 import accountRoutes from "./backend/routes/accountsRoutes.js"
 import historyRoutes from "./backend/routes/historyRoutes.js"
@@ -17,8 +17,8 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.use("/accounts", accountRoutes) // Ruta para manejar transacciones (ingresos/gastos)
-app.use("/users", userRoutes) // Rutas para usuarios
+app.use("/accounts", accountRoutes) 
+app.use("/users", userRoutes) 
 app.use("/transactions", transactionRoutes)
 app.use("/history", historyRoutes)
 

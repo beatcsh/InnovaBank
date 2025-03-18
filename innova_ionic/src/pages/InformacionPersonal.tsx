@@ -119,7 +119,7 @@ const InfoPersonal: React.FC = () => {
     console.log(userData)
 
     return (
-        <div className="bg-white min-h-screen flex flex-col items-center p-4">
+        <div className="bg-white h-screen overflow-y-auto flex flex-col items-center p-4">
             <Header />
             <div className="flex flex-col items-center">
                 <div className="avatar mt-12 mb-4">
