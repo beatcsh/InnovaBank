@@ -17,7 +17,7 @@ const FrequentActions: React.FC = () => {
                         <p className="font-semibold">Historial de la cuenta</p>
                         <p className="text-sm">Visualiza los ultimos movimientos de tu cuenta y filtra aquellos que no desees ver en el momento.</p>
                     </a>
-                    <a href="/historialcuenta" className="w-[100%] h-[100px] border-1 !text-black hover:!bg-violet-200 transition-all duration-500 border-gray-200 rounded-lg m-3 py-2 px-3 shadow-xl">
+                    <a href="/analisis" className="w-[100%] h-[100px] border-1 !text-black hover:!bg-violet-200 transition-all duration-500 border-gray-200 rounded-lg m-3 py-2 px-3 shadow-xl">
                         <p className="font-semibold">Analisis de gastos</p>
                         <p className="text-sm">Analiza los gastos de tu cuenta de forma historica y previsualiza tu situacion a futuro.</p>
                     </a>
