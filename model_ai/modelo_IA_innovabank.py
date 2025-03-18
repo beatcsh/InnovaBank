@@ -24,7 +24,6 @@ coleccion_transacciones = db["transactions"]
 datos_transacciones = list(coleccion_transacciones.find())
 df_transacciones = pd.DataFrame(datos_transacciones)
 
-# Asegurándonos de que "monto" sea numérico
 df_transacciones["monto"] = df_transacciones["monto"].astype(float)
 
 # Generando las columnas de ingresos y gastos

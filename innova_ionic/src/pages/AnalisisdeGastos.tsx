@@ -50,7 +50,6 @@ const GastosIngresos: React.FC = () => {
       try {
         const decodedToken: decodedToken = jwtDecode(token);
         const id_usuario = decodedToken._id;
-        console.log("id obtenido: " + id_usuario + " de tipo " + typeof (id_usuario));
 
         const id_tarjeta = localStorage.getItem("id_tarjeta");
         const transacciones = await axios.get("http://localhost:4000/transactions/all", {
@@ -58,18 +57,42 @@ const GastosIngresos: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        // pa filtrar las transacciones por tipo (ingresos o gastos)
+        // Filtrar las transacciones por tipo (ingresos o gastos)
         const ingresosData = transacciones.data.filter((item: any) => item.tipo === "ingreso");
         const gastosData = transacciones.data.filter((item: any) => item.tipo === "gasto");
 
         setIngresos(ingresosData);
         setGastos(gastosData);
 
-        // dependiendo de lo que selecciones, muestra los ingresos o gastos
-        const selectedData = selected === "ingresos" ? ingresosData : gastosData;
+        // Agrupar los ingresos o gastos por categoría
+        const groupByCategory = (data: any[]) => {
+          return data.reduce((acc: any, curr: any) => {
+            if (acc[curr.categoria]) {
+              acc[curr.categoria] += curr.monto;
+            } else {
+              acc[curr.categoria] = curr.monto;
+            }
+            return acc;
+          }, {});
+        };
+
+        const ingresosGrouped = groupByCategory(ingresosData);
+        const gastosGrouped = groupByCategory(gastosData);
+
+        // Dependiendo de la selección, mostramos los datos agrupados
+        const selectedData = selected === "ingresos"
+          ? Object.keys(ingresosGrouped).map((category) => ({
+              name: category,
+              value: ingresosGrouped[category],
+            }))
+          : Object.keys(gastosGrouped).map((category) => ({
+              name: category,
+              value: gastosGrouped[category],
+            }));
+
         setData(selectedData);
 
-        // calculacion xd del balance estimado
+        // Cálculo del balance estimado
         const totalIngresos = ingresosData.reduce((acc: number, item: any) => acc + item.monto, 0);
         const totalGastos = gastosData.reduce((acc: number, item: any) => acc + item.monto, 0);
         setBalanceEstimate(totalIngresos - totalGastos);
@@ -78,6 +101,8 @@ const GastosIngresos: React.FC = () => {
       }
     }
   };
+
+  console.log("gastos: ",gastos)
 
   useEffect(() => {
     fetchData();
