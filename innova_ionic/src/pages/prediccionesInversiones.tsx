@@ -73,7 +73,7 @@ const PrediccionesInversiones: React.FC = () => {
     const prevSlide = () => setCurrentIndex((prevIndex) => (prevIndex - 1 + investmentOptions.length) % investmentOptions.length);
 
     return (
-        <div className="p-4 bg-white w-[100%] h-screen overflow-y-auto">
+        <div className="bg-white w-[100%] h-screen overflow-y-auto">
             <Header />
 
             <div className="relative w-64 mx-auto mt-7">

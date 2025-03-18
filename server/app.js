@@ -13,6 +13,8 @@ mongoose.connect(process.env.url)
     .then(() => console.log("conexion establecida"))
     .catch((err) => console.log("error de conexion", err))
 
+// se queda puerto 4000
+
 const app = express()
 app.use(express.json())
 app.use(cors())

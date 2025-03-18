@@ -112,8 +112,9 @@ const Home: React.FC = () => {
         </div>
 
         {/* Lista de opciones */}
-        <div className='w-[100%] grid grid-cols-1 place-items-center gap-6'>
-        <a href="/info-user" className="w-[80%] !text-black">
+        <div className='w-[100%] grid grid-cols-1 place-items-center gap-6 mb-10'>
+          
+          <a href="/info-user" className="w-[80%] !text-black">
             <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
               Mi Información
             </div>
@@ -137,23 +138,24 @@ const Home: React.FC = () => {
             </div>
           </a>
 
-          <a href="/elegibilidad" className="w-[80%] !text-black">
-            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
-              Elegibilidad
-            </div>
-          </a>
-
           <a href="/frequent" className="w-[80%] !text-black">
             <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
               Acciones Frecuentes
             </div>
           </a>
 
-          <a href="/analisis" className="w-[80%] !text-black">
+          <a href="/analisis-inteligente" className="w-[80%] !text-black">
             <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
-              Análisis Gastos e Ingresos
+              Análisis Inteligente
             </div>
           </a>
+
+          <a href="/prediccionInversion" className="w-[80%] !text-black">
+            <div className="w-[100%] bg-gray-200 rounded-xl p-2 hover:bg-gray-300 transition-all duration-300 shadow-[0px_4px_10px_rgba(128,0,128,0.5)] text-center">
+              Prediccion de Inversion
+            </div>
+          </a>
+
         </div>
       </main>
     </div>

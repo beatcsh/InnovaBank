@@ -38,6 +38,7 @@ import InfoPersonal from './pages/InformacionPersonal';
 import ChangesPass from './pages/cambioPass';
 import PrediccionesInversiones from './pages/prediccionesInversiones';
 import GastosIngresos from './pages/AnalisisdeGastos';
+import AnalisisInteligente from './pages/AnalisisInteligente';
 
 setupIonicReact();
 
@@ -84,6 +85,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/info-user">
           <InfoPersonal />
+        </Route>
+        <Route exact path="/analisis-inteligente">
+          <AnalisisInteligente />
         </Route>
         <Route exact path="/cambio-contra">
           <ChangesPass />
